@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Detail</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <section class="header_text sub">
+        <h4><span>Product Detail</span></h4>
+    </section>
+    <section class="main-content">
+        <div class="row">
+            <div class="span9">
+                <div class="row">
+                    <div class="span4">
+                        <img th:src="@{${product.photoUrl}}" alt="Product Image" class="img-thumbnail">
+                    </div>
+                    <div class="span5">
+                        <address>
+                            <strong>Brand:</strong> <span th:text="${product.brand.name}">Apple</span><br>
+                            <strong>Product Code:</strong> <span th:text="${product.productCode}">Product 14</span><br>
+                            <strong>Reward Points:</strong> <span th:text="${product.rewardPoints}">0</span><br>
+                            <strong>Category:</strong> <span th:text="${product.productCategory.name}">0</span><br>
+                            <strong>Availability:</strong>
+                            <span th:text="${product.countStock > 0 ? 'In Stock' : 'Out Of Stock'}"></span><br>
+                            <strong>Sales:</strong> <span th:text="${product.salesCount}">0</span>
+                        </address>
+                        <h4>
+                            <strong>
+        <span th:if="${product.discountPrice > 0}">
+            <span style="text-decoration: line-through; color: gray; font-weight: normal;">
+                $<span th:text="${#numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')}"></span>
+            </span>
+            &nbsp;
+            <span style="color: #d9534f;">
+                $<span
+                    th:text="${#numbers.formatDecimal(product.price * product.discountPrice, 1, 'COMMA', 2, 'POINT')}"></span>
+            </span>
+        </span>
+                                <span th:if="${product.discountPrice <= 0}">
+            $<span th:text="${#numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')}"></span>
+        </span>
+                            </strong>
+                        </h4>
+                    </div>
+                    <div class="span5">
+                        <form class="form-inline" action="/addToCart" method="post" th:object="${addToCart}">
+                            <p>&nbsp;</p>
+                            <label>Qty:</label>
+                            <input type="number" name="quantity" class="span1" value="1" min="1">
+
+                            <!-- Burada Thymeleaf sintaksisi ilə value verilir -->
+                            <input type="hidden" name="productId" th:value="${product.id}">
+
+
+                            <button class="btn btn-inverse" type="submit">Add to cart</button>
+                        </form>
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <div class="span9">
+                        <ul class="nav nav-tabs" id="myTab">
+                            <li class="active"><a href="#home" data-toggle="tab">Description</a></li>
+                            <li><a href="#profile" data-toggle="tab">Additional Information</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div th:text="${product.description}" class="tab-pane active" id="home">
+                                Description is Here
+                            </div>
+                            <div class="tab-pane" id="profile">
+                                <table class="table table-striped shop_attributes">
+                                    <tbody>
+                                    <tr>
+                                        <th>Sizes</th>
+                                        <td>
+        <span th:each="size : ${sizes}">
+            <span th:text="'  '+${size.size} + ' (' + ${size.quantity} + ')'+'  '"></span>
+        </span>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="alt">
+                                        <th>Colour</th>
+                                        <td th:text="${product.color}">Orange, Yellow</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Related Products hissəsi (dəyişilməyib) -->
+                    <div class="span9">
+                        <br>
+                        <h4 class="title">
+                            <span class="pull-left"><span class="text"><strong>Related</strong> Products</span></span>
+                            <span class="pull-right">
+										<a class="left button" href="#relatedCarousel" data-slide="prev"></a><a class="right button" href="#relatedCarousel" data-slide="next"></a>
+									</span>
+                        </h4>
+                        <div id="relatedCarousel" class="carousel slide">
+                            <div class="carousel-inner">
+
+                                <div th:each="group, stat : ${rlProductGroups}"
+                                     th:class="'item' + (${stat.index} == 0 ? ' active' : '')">
+                                    <ul class="thumbnails listing-products">
+
+                                        <li class="span3" th:each="product : ${group}">
+                                            <div class="product-box">
+                                                <a th:href="@{'/product/product-detail/' + ${product.id}}">
+                                                    <img th:src="${product.photoUrl}" alt=""/>
+                                                </a><br/>
+                                                <a th:href="@{'/product/product-detail/' + ${product.id}}" class="title"
+                                                   th:text="${product.name}">Product Name</a><br/>
+                                                <a href="#" class="category"
+                                                   th:text="${product.productCategory.name}">Category</a>
+
+                                                <p class="price">
+                            <span th:if="${product.discountPrice != null and product.discountPrice > 0}">
+                                <del th:text="'$' + ${product.price}">Old Price</del>
+                                <span class="text-danger" th:text="' $' + ${product.discountPrice}">New Price</span>
+                            </span>
+                                                    <span th:if="${product.discountPrice == null or product.discountPrice == 0}"
+                                                          th:text="'$' + ${product.price}">Price</span>
+                                                </p>
+                                            </div>
+                                        </li>
+
+                                    </ul>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar hissəsi (dəyişilməyib) -->
+            <div class="span3 col">
+                <div class="block">
+                    <h4 class="title">
+                        <span class="pull-left"><span class="text">Randomize</span></span>
+                        <span class="pull-right">
+							<a class="left button" href="#myCarousel" data-slide="prev"></a>
+							<a class="right button" href="#myCarousel" data-slide="next"></a>
+						</span>
+                    </h4>
+                    <div id="myCarousel" class="carousel slide">
+                        <div class="carousel-inner">
+                            <div th:each="rdProduct, iterStat : ${randomProducts}"
+                                 th:class="${iterStat.first} ? 'item active' : 'item'">
+                                <ul class="thumbnails listing-products">
+                                    <li class="span3">
+                                        <div class="product-box">
+                                            <span class="sale_tag"></span>
+                                            <img th:src="${rdProduct.photoUrl}" alt=""
+                                                 src="/front/themes/images/ladies/1.jpg"><br/>
+                                            <a th:text="${rdProduct.name}" th:href="@{'/product/product-detail/' + ${rdProduct.id}}" class="title">Fusce
+                                                id molestie massa</a><br/>
+                                            <a th:text="${rdProduct.productCategory.name}" href="#" class="category">Suspendisse
+                                                aliquet</a>
+                                            <p th:text="${rdProduct.price}+'$'" class="price">$261</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="block">
+                    <h4 class="title"><strong>Best</strong> Seller</h4>
+                    <ul class="small-product">
+                        <li th:each="product : ${bsProduct}">
+                            <a href="#" title="Praesent tempor sem sodales">
+                                <img th:src="${product.photoUrl}" src="front/themes/images/ladies/3.jpg"
+                                     alt="Praesent tempor sem sodales">
+                            </a>
+                            <a th:text="${product.name}" th:href="@{'/product/product-detail/' + ${product.id}}">Praesent tempor sem</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>

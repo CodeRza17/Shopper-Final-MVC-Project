@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{dashboard/layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>Delete Brand</title>
+</head>
+<body>
+<div layout:fragment="content" class="container mt-5">
+
+  <h2>Delete Brand</h2>
+
+  <p>Are you sure you want to delete the brand:</p>
+  <h4 th:text="*{name}">Brand Name</h4>
+
+  <form method="post" th:action="@{/dashboard/brand/delete}" th:object="${brand}">
+    <input type="hidden" th:field="*{id}" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a th:href="@{/dashboard/brand}" class="btn btn-secondary">Cancel</a>
+  </form>
+
+</div>
+</body>
+</html>

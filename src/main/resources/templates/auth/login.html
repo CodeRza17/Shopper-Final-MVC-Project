@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <section class="main-content">
+        <div class="row">
+            <div class="span5">
+                <h4 class="title"><span class="text"><strong>Login</strong> Form</span></h4>
+
+                <form th:action="@{/login}" method="post">
+                    <fieldset>
+                        <div class="control-group">
+                            <label class="control-label">Email</label>
+                            <div class="controls">
+                                <input type="text" name="username" placeholder="Enter your email" class="input-xlarge">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Password</label>
+                            <div class="controls">
+                                <input type="password" name="password" placeholder="Enter your password" class="input-xlarge">
+                            </div>
+                        </div>
+                        <p>
+                            Don't have an account?
+                            <a href="/register">Register here</a>
+                        </p>
+                        <div class="control-group">
+                            <input class="btn btn-inverse large" type="submit" value="Sign into your account">
+                            <hr>
+                            <p class="reset">Recover your <a href="#" title="Recover your username or password">username or password</a></p>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>

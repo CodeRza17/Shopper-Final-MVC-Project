@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{dashboard/layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>Users</title>
+</head>
+<body>
+<div layout:fragment="content">
+  <section class="main-content">
+    <div class="container">
+      <h2>Users</h2>
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Surname</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Brand</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+          <td th:text="${user.name}">Name</td>
+          <td th:text="${user.surname}">Surname</td>
+          <td th:text="${user.email}">Email</td>
+          <td th:text="${#strings.capitalize(#strings.replace(user.role.name.replace('ROLE_', ''), '_', ' ').toLowerCase())}">Role</td>
+
+          <td th:text="${user.brand.name}">Brand</td>
+          <td>
+            <a th:href="@{'/dashboard/users/edit/' + ${user.id}}" class="btn btn-sm btn-warning">Edit</a>
+            <a href="#" class="btn btn-sm btn-danger">Delete</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+</body>
+</html>

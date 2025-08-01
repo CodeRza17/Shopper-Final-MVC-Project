@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{dashboard/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Brand</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Your Brand</h2>
+
+        <div class="card shadow-sm">
+            <div class="row g-0 align-items-center">
+                <div class="col-md-2 text-center p-3">
+                    <img th:src="@{${brand.logoUrl}}" alt="Brand Logo" class="img-fluid rounded" style="max-height: 80px;">
+                </div>
+                <div class="col-md-7">
+                    <div class="card-body">
+                        <h4 class="card-title mb-0" th:text="${brand.name}">Brand Name</h4>
+                    </div>
+                </div>
+                <div class="col-md-3 text-end p-3">
+                    <a href="/dashboard/brand/update" class="btn btn-warning btn-sm me-2">Edit</a>
+                    <a href="/dashboard/brand/delete" class="btn btn-danger btn-sm">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

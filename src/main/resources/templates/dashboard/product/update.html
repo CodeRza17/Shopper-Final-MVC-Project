@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{dashboard/layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>Update Product</title>
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <link th:href="@{/admin/css/sb-admin-2.css}" rel="stylesheet" />
+  <style>
+    .form-container { max-width: 800px; margin: 0 auto; padding: 20px; background-color: #fff;
+      border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+    .form-group { margin-bottom: 20px; }
+    .form-label { display: block; margin-bottom: 5px; font-weight: 600; }
+    .form-control { width: 100%; padding: 8px 12px; border: 1px solid #ddd;
+      border-radius: 4px; font-size: 14px; }
+    .btn { padding: 10px 20px; color: white; border: none; border-radius: 4px;
+      cursor: pointer; font-size: 16px; }
+    .btn-primary { background-color: #4CAF50; }
+    .btn-primary:hover { background-color: #45a049; }
+    .btn-secondary { background-color: #6c757d; }
+    .btn-secondary:hover { background-color: #5a6268; }
+    .size-item { display: flex; align-items: center; margin-bottom: 10px; }
+    .size-item input { margin-right: 10px; }
+    .add-size-btn { background-color: #007bff; margin-bottom: 20px; }
+    .add-size-btn:hover { background-color: #0069d9; }
+    .remove-size-btn { background-color: #dc3545; margin-left: 10px; }
+    .remove-size-btn:hover { background-color: #c82333; }
+    .image-preview { max-width: 150px; max-height: 150px; margin-top: 10px; }
+    .alert-danger { background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 4px; margin-bottom: 15px; }
+  </style>
+</head>
+<body>
+<div layout:fragment="content">
+  <div class="form-container">
+    <h2>Update Product</h2>
+
+    <!-- Xəta mesajı -->
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+    <form th:action="@{/dashboard/product/update/__${product.id}__}" th:object="${product}" method="post">
+      <input type="hidden" th:field="*{id}">
+
+      <!-- Məhsul məlumatları -->
+      <div class="form-group">
+        <label class="form-label" for="name">Product Name</label>
+        <input type="text" class="form-control" id="name" th:field="*{name}" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="productCode">Product Code</label>
+        <input type="text" class="form-control" id="productCode" th:field="*{productCode}" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="description">Description</label>
+        <textarea class="form-control" id="description" th:field="*{description}" rows="3"></textarea>
+      </div>
+
+      <!-- Qiymət -->
+      <div class="form-group">
+        <label class="form-label" for="price">Price</label>
+        <input type="number" step="0.01" class="form-control" id="price" th:field="*{price}" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="discountPrice">Discount Price</label>
+        <input type="number" step="0.01" class="form-control" id="discountPrice" th:field="*{discountPrice}">
+      </div>
+
+
+      <div class="form-group">
+        <label class="form-label" for="rewardPoints">Reward Points</label>
+        <input type="number" step="0.01" class="form-control" id="rewardPoints" th:field="*{rewardPoints}">
+      </div>
+
+      <!-- Kateqoriyalar -->
+      <div class="form-group">
+        <label class="form-label" for="audienceCategoryId">Audience Category</label>
+        <select class="form-control" id="audienceCategoryId" th:field="*{audienceCategoryId}" required>
+          <option value="">Select Audience Category</option>
+          <option th:each="category : ${audienceCategories}"
+                  th:value="${category.id}"
+                  th:selected="${category.id == product.audienceCategoryId}"
+                  th:text="${category.name}"></option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="productCategoryId">Product Category</label>
+        <select class="form-control" id="productCategoryId" th:field="*{productCategoryId}" required>
+          <option value="">Select Product Category</option>
+          <option th:each="category : ${productCategories}"
+                  th:value="${category.id}"
+                  th:selected="${category.id == product.productCategoryId}"
+                  th:text="${category.name}"></option>
+        </select>
+      </div>
+
+      <!-- Şəkil -->
+      <div class="form-group">
+        <label class="form-label" for="photoUrl">Image URL</label>
+        <input type="text" class="form-control" id="photoUrl" th:field="*{photoUrl}"
+               onchange="document.getElementById('imagePreview').src = this.value">
+        <img th:src="*{photoUrl}" id="imagePreview" class="image-preview"
+             onerror="this.src='https://via.placeholder.com/150'">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="color">Color</label>
+        <input type="text" class="form-control" id="color" th:field="*{color}">
+      </div>
+
+      <!-- Ölçülər -->
+      <div class="form-group">
+        <label class="form-label">Sizes</label>
+        <div id="sizes-container">
+          <div class="size-item" th:each="size, stat : *{sizesDtos}">
+            <input type="hidden" th:field="*{sizesDtos[__${stat.index}__].id}">
+            <input type="text" th:field="*{sizesDtos[__${stat.index}__].size}"
+                   placeholder="Size name" class="form-control" style="width: 30%;" required>
+            <input type="number" th:field="*{sizesDtos[__${stat.index}__].quantity}"
+                   placeholder="Quantity" min="0" class="form-control" style="width: 30%;" required>
+            <button type="button" class="btn remove-size-btn" onclick="removeSizeItem(this)">Remove</button>
+          </div>
+        </div>
+        <button type="button" class="btn add-size-btn" id="add-size-btn">Add Size</button>
+      </div>
+
+      <!-- Düymələr -->
+      <div class="form-group d-flex justify-content-between">
+        <a th:href="@{/dashboard/products}" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary">Update Product</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- JS faylları -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <script th:src="@{/admin/js/product-update.js}"></script>
+  <!-- Sizes üçün JS -->
+  <script th:src="@{/admin/js/product-update.js}"></script>
+</div>
+</body>
+</html>

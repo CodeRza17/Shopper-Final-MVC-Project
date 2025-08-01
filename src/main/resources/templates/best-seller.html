@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Top Seller</title>
+    <!-- HEAD hissəsində əlavə et -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        .sales-count {
+    color: #ff5722;
+    font-size: 15px;
+    margin-top: 6px;
+    font-weight: bold;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.6; }
+    100% { opacity: 1; }
+}
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 4 məhsul sətirdə */
+            gap: 20px;
+            padding: 0;
+            margin: 0 auto;
+        }
+        .product-box {
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            transition: box-shadow 0.3s ease;
+            height: 100%;
+            background: #fff;
+        }
+        .product-box:hover {
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .product-box img {
+            max-height: 200px;
+            object-fit: contain;
+            width: 100%;
+            border-radius: 8px;
+        }
+        .product-box .title {
+            display: block;
+            font-weight: bold;
+            margin-top: 10px;
+            font-size: 16px;
+            color: #333;
+            text-decoration: none;
+        }
+        .product-box .title:hover {
+            color: #007bff;
+        }
+        .product-box .price {
+            color: #000;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 992px) {
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr); /* Mobil cihazlarda 2 sütun */
+            }
+        }
+
+        @media (max-width: 576px) {
+            .product-grid {
+                grid-template-columns: repeat(1, 1fr); /* Kiçik ekranlarda 1 sütun */
+            }
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+    <section class="header_text sub">
+        <h4><span>New products</span></h4>
+    </section>
+
+    <section class="main-content">
+        <div class="product-grid">
+            <div th:each="product : ${bsProduct}" class="product-box">
+                <a href="#" th:href="@{'/product/product-detail/' + ${product.id}}">
+                    <img th:src="${product.photoUrl}" alt="Product Image">
+                </a>
+                <a th:text="${product.name}" th:href="@{'/product/product-detail/' + ${product.id}}" class="title"></a>
+                <p class="sales-count">
+                    <i class="fa fa-fire"></i> <span th:text="${product.salesCount}">0</span> Sold
+                </p>
+
+
+                <p th:text="${product.price} + '$'" class="price"></p>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>

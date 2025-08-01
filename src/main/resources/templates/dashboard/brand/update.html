@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{dashboard/layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>Brand Update</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+  <div class="container-fluid">
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h5 class="m-0 font-weight-bold text-primary">Update Brand Information</h5>
+      </div>
+      <div class="card-body">
+        <form method="post" th:action="@{/dashboard/brand/update}" th:object="${updatedBrand}">
+
+          <input type="hidden" th:field="*{id}" />
+
+          <!-- Brand Name -->
+          <div class="form-group">
+            <label for="name">Brand Name</label>
+            <input id="name" type="text" th:field="*{name}" class="form-control" placeholder="Enter brand name">
+          </div>
+
+          <!-- Logo URL -->
+          <div class="form-group">
+            <label for="logoUrl">Logo URL</label>
+            <input id="logoUrl" type="text" th:field="*{logoUrl}" class="form-control" placeholder="Enter logo URL">
+          </div>
+
+          <hr>
+
+          <h5 class="mt-3">Contact Information</h5>
+
+          <!-- Address -->
+          <div class="form-group">
+            <label for="address">Address</label>
+            <input id="address" name="address" th:value="${updatedContactInfos.address}" class="form-control" placeholder="Enter address">
+          </div>
+
+          <!-- Address Map -->
+          <div class="form-group">
+            <label for="addressMap">Address Map URL</label>
+            <input id="addressMap" name="addressMap" th:value="${updatedContactInfos.addressMap}" class="form-control" placeholder="Enter map link">
+          </div>
+
+          <!-- Email -->
+          <div class="form-group">
+            <label for="email">Contact Email</label>
+            <input id="email" name="email" th:value="${updatedContactInfos.email}" class="form-control" placeholder="Enter email">
+          </div>
+
+          <!-- Phone Number -->
+          <div class="form-group">
+            <label for="phoneNumber">Phone Number</label>
+            <input id="phoneNumber" name="phoneNumber" th:value="${updatedContactInfos.phoneNumber}" class="form-control" placeholder="Enter phone number">
+          </div>
+
+          <!-- Submit -->
+          <div class="form-group">
+            <input class="btn btn-warning" type="submit" value="Update">
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

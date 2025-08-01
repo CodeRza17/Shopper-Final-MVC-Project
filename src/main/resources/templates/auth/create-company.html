@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Company</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <section class="header_text sub">
+        <h4><span>Create Company</span></h4>
+    </section>
+    <section class="main-content">
+        <div class="row">
+            <div class="span7">
+                <h4 class="title"><span class="text"><strong>Create</strong> Company</span></h4>
+                <form th:action="@{/create-company}" method="post" class="form-stacked">
+                    <fieldset>
+                        <div class="control-group">
+                            <label class="control-label">Name of Company</label>
+                            <div class="controls">
+                                <input type="text" placeholder="Enter company name" name="name" class="input-xlarge">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Logo of Company (Photo URL)</label>
+                            <div class="controls">
+                                <input type="text" placeholder="Enter logo URL" name="logoUrl" class="input-xlarge">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Address</label>
+                            <div class="controls">
+                                <input type="text" placeholder="Enter address" name="contactInfo.address" class="input-xlarge">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Address Map</label>
+                            <div class="controls">
+                                <input type="text" placeholder="Enter address map" name="contactInfo.addressMap" class="input-xlarge">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Email</label>
+                            <div class="controls">
+                                <input type="email" placeholder="Enter email" name="contactInfo.email" class="input-xlarge">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Phone Number</label>
+                            <div class="controls">
+                                <input type="text" placeholder="Enter phone number" name="contactInfo.phoneNumber" class="input-xlarge">
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Brand Owner Code</label>
+                            <div class="controls">
+                                <input type="text" placeholder="Enter brand owner code" name="bradOwnerCode" class="input-xlarge" required>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <div class="actions">
+                            <input class="btn btn-inverse large" type="submit" value="Create Company">
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>

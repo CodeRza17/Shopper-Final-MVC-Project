@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layout}">
+<head>
+	<meta charset="UTF-8">
+	<title>Products</title>
+</head>
+<body>
+<div layout:fragment="content">
+	<section class="header_text sub">
+		<h4><span>New products</span></h4>
+	</section>
+
+	<section class="main-content">
+		<div class="row">
+			<div class="span9">
+				<ul class="product-grid" style="
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                    gap: 20px;
+                    padding: 0;
+                    list-style: none;">
+					<li th:each="product : ${products.models}" class="product-item" style="position: relative; background: #fff; padding: 10px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05); text-align: center;">
+                        <span th:if="${product.discountPrice > 0}"
+							  style="position: absolute; top: 10px; right: 10px; background-color: red; color: white; padding: 5px 8px; border-radius: 4px; font-weight: bold; font-size: 14px;"
+							  th:text="'-' + ${#numbers.formatDecimal(product.discountPrice * 100, 0, 0)} + '%'"></span>
+
+						<a th:href="@{'/product/product-detail/' + ${product.id}}">
+							<img th:src="${product.photoUrl}" alt="Product Image" style="width: 100%; height: auto; border-radius: 5px;">
+						</a>
+
+						<a th:href="@{'/product/product-detail/' + ${product.id}}" class="title" th:text="${product.name}"
+						   style="display: block; margin-top: 10px; font-weight: bold; text-decoration: none; color: black;"></a>
+
+						<p class="price" style="margin-top: 5px;">
+                            <span th:if="${product.discountPrice > 0}"
+								  style="text-decoration: line-through; color: gray; margin-right: 8px;"
+								  th:text="${'$' + #numbers.formatDecimal(product.price, 1, 2)}"></span>
+
+							<span th:style="${product.discountPrice > 0} ? 'color: red; font-weight: bold;' : 'font-weight: bold;'"
+								  th:text="${'$' + #numbers.formatDecimal(product.discountPrice > 0 ? product.price * (1 - product.discountPrice) : product.price, 1, 2)}"></span>
+						</p>
+					</li>
+				</ul>
+
+				<hr>
+				<div class="pagination pagination-small pagination-centered" th:if="${products.totalPage > 1}">
+					<ul>
+						<li th:classappend="${products.currentPage == 1} ? 'disabled'">
+							<a th:href="@{'/products/' + ${audience} + '?currentPage=' + ${products.currentPage - 1}}"
+							   th:if="${products.currentPage > 1}">Prev</a>
+							<a th:if="${products.currentPage == 1}">Prev</a>
+						</li>
+
+						<li th:each="pageNum : ${#numbers.sequence(1, products.totalPage)}"
+							th:classappend="${pageNum == products.currentPage} ? 'active'">
+							<a th:href="@{'/products/' + ${audience} + '?currentPage=' + ${pageNum}}"
+							   th:text="${pageNum}"></a>
+						</li>
+
+						<li th:classappend="${products.currentPage == products.totalPage} ? 'disabled'">
+							<a th:href="@{'/products/' + ${audience} + '?currentPage=' + ${products.currentPage + 1}}"
+							   th:if="${products.currentPage < products.totalPage}">Next</a>
+							<a th:if="${products.currentPage == products.totalPage}">Next</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="span3 col">
+				<div class="block">
+					<form method="get" th:action="@{'/products/' + ${audience}}">
+						<ul class="nav nav-list">
+							<li class="nav-header">SUB CATEGORIES</li>
+							<li th:each="category : ${categories}">
+								<label>
+									<input type="checkbox" name="categoryIds" th:value="${category.id}"
+										   th:checked="${#lists.contains(selectedCategoryIds, category.id)}"
+										   onchange="this.form.submit()">
+									<span th:text="${category.name}"></span>
+								</label>
+							</li>
+						</ul>
+
+						<br/>
+
+						<ul class="nav nav-list below">
+							<li class="nav-header">BRANDS</li>
+							<li th:each="brand : ${brands}">
+								<label>
+									<input type="checkbox" name="brandIds" th:value="${brand.id}"
+										   th:checked="${#lists.contains(selectedBrandIds, brand.id)}"
+										   onchange="this.form.submit()">
+									<span th:text="${brand.name}"></span>
+								</label>
+							</li>
+						</ul>
+
+						<!-- səhifələmə sıfırlamaq üçün -->
+						<input type="hidden" name="currentPage" value="1" />
+					</form>
+				</div>
+
+				<div class="block">
+					<h4 class="title">
+						<span class="pull-left"><span class="text">Randomize</span></span>
+						<span class="pull-right">
+            <a class="left button" href="#myCarousel" data-slide="prev"></a>
+            <a class="right button" href="#myCarousel" data-slide="next"></a>
+        </span>
+					</h4>
+					<div id="myCarousel" class="carousel slide">
+						<div class="carousel-inner">
+							<div th:each="rdProduct, iterStat : ${randomProducts}"
+								 th:class="${iterStat.first} ? 'item active' : 'item'">
+								<ul class="thumbnails listing-products">
+									<li class="span3">
+										<div class="product-box">
+											<span class="sale_tag"></span>
+											<img th:src="${rdProduct.photoUrl}" alt="" src="/front/themes/images/ladies/1.jpg"><br/>
+											<a th:text="${rdProduct.name}" th:href="@{'/product/product-detail/' + ${rdProduct.id}}" class="title">Fusce id molestie massa</a><br/>
+											<a th:text="${rdProduct.productCategory.name}" href="#" class="category">Suspendisse aliquet</a>
+											<p th:text="${rdProduct.price}+'$'" class="price">$261</p>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="block">
+					<h4 class="title"><strong>Best</strong> Seller</h4>
+					<ul class="small-product">
+						<li th:each="product : ${bsProduct}">
+							<a href="#" title="Praesent tempor sem sodales">
+								<img th:src="${product.photoUrl}" src="/front/themes/images/ladies/3.jpg" alt="Praesent tempor sem sodales">
+							</a>
+							<a th:text="${product.name}"  th:href="@{'/product/product-detail/' + ${product.id}}">Praesent tempor sem</a>
+						</li>
+					</ul>
+				</div>
+
+			</div>
+		</div>
+	</section>
+</div>
+</body>
+</html>

@@ -1,0 +1,13 @@
+package com.final_project.shopper.shopper;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class ShopperApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}

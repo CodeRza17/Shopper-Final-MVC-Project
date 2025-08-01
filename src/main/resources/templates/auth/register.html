@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <!-- JS faylını əlavə et -->
+    <script th:src="@{/admin/js/register.js}" defer></script>
+</head>
+<body>
+<div layout:fragment="content">
+    <section class="header_text sub">
+        <h4><span>Register</span></h4>
+    </section>
+    <section class="main-content">
+        <div class="row">
+            <div class="span7">
+                <h4 class="title"><span class="text"><strong>Register</strong> Form</span></h4>
+                <form th:action="@{/register}" method="post" class="form-stacked">
+                    <fieldset>
+                        <div class="control-group">
+                            <label class="control-label">Name</label>
+                            <div class="controls">
+                                <input type="text" placeholder="Enter your name" name="name" class="input-xlarge" required>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Surname</label>
+                            <div class="controls">
+                                <input type="text" placeholder="Enter your surname" name="surname" class="input-xlarge" required>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Role</label>
+                            <div class="controls">
+                                <select name="roleName" id="roleSelect" class="input-xlarge" required>
+                                    <option value="ROLE_BUYER">Buyer</option>
+                                    <option value="ROLE_REQUEST">Admin</option>
+                                    <option value="ROLE_SUPER_ADMIN">Super Admin</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="control-group" id="companyField" style="display:none;">
+                            <label class="control-label">Select Company</label>
+                            <div class="controls">
+                                <select name="brandId" class="input-xlarge" required>
+                                    <option value="" disabled selected>Select a brand</option>
+                                    <option th:each="brand : ${brands}" th:value="${brand.id}" th:text="${brand.name}"></option>
+                                </select>
+                                <p>Don't have a company yet?</p>
+                                <a href="/create-company" class="btn btn-primary">Create a Company</a>
+                            </div>
+                        </div>
+
+                        <div class="control-group" id="ownerCodeField" style="display:none;">
+                            <label class="control-label">Brand Owner Code</label>
+                            <div class="controls">
+                                <input type="text" placeholder="Enter brand owner code" name="brandOwnerCode" class="input-xlarge" required>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Email address</label>
+                            <div class="controls">
+                                <input type="email" placeholder="Enter your email" name="email" class="input-xlarge" required>
+                            </div>
+                        </div>
+
+                        <div th:if="${errorMessage}" style="color: red;">
+                            <p th:text="${errorMessage}"></p>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Password</label>
+                            <div class="controls">
+                                <input type="password" placeholder="Enter your password" name="password" class="input-xlarge" required>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="actions">
+                            <input tabindex="9" class="btn btn-inverse large" type="submit" value="Create your account">
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script th:src="@{/front/themes/js/common.js}"></script>
+</body>
+</html>
