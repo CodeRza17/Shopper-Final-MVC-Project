@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>OTP Verification</title>
+  <script th:src="@{/front/themes/js/otp.js}" defer></script>
+</head>
+<body>
+<div layout:fragment="content">
+  <section class="header_text sub">
+    <h4><span>OTP Verification</span></h4>
+  </section>
+  <section class="main-content">
+    <div class="row">
+      <div class="span7">
+        <h4 class="title"><span class="text"><strong>OTP</strong> təsdiqi</span></h4>
+
+        <form th:action="@{/verify}" method="post" class="form-stacked">
+          <fieldset>
+            <input type="hidden" name="email" th:value="${email}"/>
+
+            <div class="control-group">
+              <label class="control-label">Email</label>
+              <div class="controls">
+                <input type="email" th:value="${email}" readonly class="input-xlarge">
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">OTP Kodu</label>
+              <div class="controls">
+                <input type="text" name="otp" placeholder="Enter OTP code" class="input-xlarge" required maxlength="6" pattern="[0-9]{6}">
+              </div>
+            </div>
+
+            <!-- Error message -->
+            <div th:if="${error}" style="color: red; margin-bottom: 10px;">
+              <p th:text="${error}"></p>
+            </div>
+
+            <!-- Success message -->
+            <div th:if="${message}" style="color: green; margin-bottom: 10px;">
+              <p th:text="${message}"></p>
+            </div>
+
+            <div class="actions">
+              <input tabindex="9" class="btn btn-inverse large" type="submit" value="Təsdiqlə">
+            </div>
+          </fieldset>
+        </form>
+
+        <form th:action="@{/resend-otp}" method="post" style="margin-top: 15px;">
+          <input type="hidden" name="email" th:value="${email}"/>
+          <button type="submit" id="resendBtn" class="btn btn-primary">OTP-ni yenidən göndər</button>
+          <span id="timer" style="margin-left: 10px; font-weight: bold; color: #555;"></span>
+        </form>
+
+
+      </div>
+    </div>
+  </section>
+</div>
+</body>
+</html>

@@ -7,6 +7,7 @@ import com.final_project.shopper.shopper.dtos.user.UserEditDto;
 import com.final_project.shopper.shopper.models.Brand;
 import com.final_project.shopper.shopper.models.Role;
 import com.final_project.shopper.shopper.models.User;
+import com.final_project.shopper.shopper.otp.OtpService;
 import com.final_project.shopper.shopper.repositories.BrandRepository;
 import com.final_project.shopper.shopper.repositories.RoleRepository;
 import com.final_project.shopper.shopper.repositories.UserRepository;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,29 +29,44 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final ModelMapper modelMapper;
+    private final OtpService otpService;
 
-    public UserServiceImpl(UserRepository userRepository, BrandRepository brandRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository, ModelMapper modelMapper) {
+    public UserServiceImpl(UserRepository userRepository, BrandRepository brandRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository, ModelMapper modelMapper, OtpService otpService) {
         this.userRepository = userRepository;
         this.brandRepository = brandRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.modelMapper = modelMapper;
+        this.otpService = otpService;
     }
 
     @Override
     public boolean register(UserRegisterDto userRegisterDto) {
+
         User findUser = userRepository.findByEmail(userRegisterDto.getEmail());
         if (findUser != null) {
             return false;
         }
 
+
         User user = new User();
+
+        user.setName(userRegisterDto.getName());
+        user.setSurname(userRegisterDto.getSurname());
+        user.setEmail(userRegisterDto.getEmail());
+        user.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
+        user.setRewardPoint(0.0);
+        user.setIsVerified(false);
+
+
+        Role role = roleRepository.findByName(userRegisterDto.getRoleName())
+                .orElseThrow(() -> new RuntimeException("Role not found"));
+        user.setRole(role);
 
 
         if (userRegisterDto.getBrandId() != null) {
             Brand brand = brandRepository.findById(userRegisterDto.getBrandId())
                     .orElseThrow(() -> new RuntimeException("Brand not found"));
-
 
             if ("ROLE_SUPER_ADMIN".equalsIgnoreCase(userRegisterDto.getRoleName())) {
                 if (userRegisterDto.getBrandOwnerCode() == null ||
@@ -62,18 +79,15 @@ public class UserServiceImpl implements UserService {
         }
 
 
-        Role role = roleRepository.findByName(userRegisterDto.getRoleName())
-                .orElseThrow(() -> new RuntimeException("Role not found"));
+        String otp = otpService.generateOtp();
+        otpService.storePendingUser(user.getEmail(), user, otp);
 
-        user.setName(userRegisterDto.getName());
-        user.setSurname(userRegisterDto.getSurname());
-        user.setEmail(userRegisterDto.getEmail());
-        user.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
-        user.setRole(role);
 
-        userRepository.save(user);
+        otpService.sendOtpEmail(user.getEmail(), otp);
+
         return true;
     }
+
 
 
     @Override
@@ -129,6 +143,10 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    @Override
+    public void deleteUserById(Long id) {
+        userRepository.deleteById(id);
+    }
 
 
 }

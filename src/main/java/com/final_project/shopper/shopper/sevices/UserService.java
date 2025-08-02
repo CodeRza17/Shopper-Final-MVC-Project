@@ -23,4 +23,6 @@ public interface UserService {
     List<Role> getEditableRoles();
 
     void updateUser(UserEditDto userEditDto);
+
+    void deleteUserById(Long id);
 }

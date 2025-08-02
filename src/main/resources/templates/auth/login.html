@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html
-        xmlns:th="http://www.thymeleaf.org"
-        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        layout:decorate="~{layout}">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
@@ -19,15 +18,19 @@
                         <div class="control-group">
                             <label class="control-label">Email</label>
                             <div class="controls">
-                                <input type="text" name="username" placeholder="Enter your email" class="input-xlarge">
+                                <input type="text" name="username" placeholder="Enter your email" class="input-xlarge" required>
                             </div>
                         </div>
                         <div class="control-group">
                             <label class="control-label">Password</label>
                             <div class="controls">
-                                <input type="password" name="password" placeholder="Enter your password" class="input-xlarge">
+                                <input type="password" name="password" placeholder="Enter your password" class="input-xlarge" required>
                             </div>
                         </div>
+                        <div th:if="${param.error}" style="color: red; margin-bottom: 15px;">
+                            The email or password you entered is incorrect!
+                        </div>
+
                         <p>
                             Don't have an account?
                             <a href="/register">Register here</a>

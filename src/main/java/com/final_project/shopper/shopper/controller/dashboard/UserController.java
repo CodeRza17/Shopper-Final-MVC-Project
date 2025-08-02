@@ -67,5 +67,35 @@ public class UserController {
         return "redirect:/dashboard/users";
     }
 
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+    @GetMapping("/dashboard/users/delete/{id}")
+    public String deleteUserConfirm(@PathVariable Long id, Model model, Principal principal) {
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        User currentUser = userRepository.findByEmail(principal.getName());
+
+        if (!user.getBrand().getId().equals(currentUser.getBrand().getId())) {
+            throw new AccessDeniedException("You are not authorized to delete this user");
+        }
+
+        model.addAttribute("user", user);
+        return "dashboard/users/delete";
+    }
+
+
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+    @PostMapping("/dashboard/users/delete")
+    public String deleteUser(@RequestParam Long id, Principal principal) {
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        User currentUser = userRepository.findByEmail(principal.getName());
+
+        if (!user.getBrand().getId().equals(currentUser.getBrand().getId())) {
+            throw new AccessDeniedException("You are not authorized to delete this user");
+        }
+
+        userService.deleteUserById(id);
+
+        return "redirect:/dashboard/users?deleteSuccess";
+    }
+
 
 }
