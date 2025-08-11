@@ -1,0 +1,18 @@
+<!-- templates/error/404.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <title>404 - Səhifə tapılmadı</title>
+</head>
+<body>
+<div layout:fragment="content">
+  <div style="text-align:center; padding: 60px;">
+    <h1 style="color: #117a8b; font-size: 48px;">404 - Səhifə tapılmadı</h1>
+    <p style="font-size: 18px;">Axtardığınız səhifə mövcud deyil və ya köçürülüb.</p>
+    <a th:href="@{/}" style="margin-top: 20px; display:inline-block; padding: 10px 20px; background-color: #117a8b; color: white; text-decoration: none; border-radius: 6px;">Əsas səhifəyə qayıt</a>
+  </div>
+</div>
+</body>
+</html>

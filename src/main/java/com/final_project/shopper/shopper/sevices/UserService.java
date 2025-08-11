@@ -2,6 +2,7 @@ package com.final_project.shopper.shopper.sevices;
 
 import com.final_project.shopper.shopper.dtos.auth.UserRegisterDto;
 import com.final_project.shopper.shopper.dtos.user.UserDashboardDto;
+import com.final_project.shopper.shopper.dtos.user.UserDto;
 import com.final_project.shopper.shopper.dtos.user.UserEditDto;
 import com.final_project.shopper.shopper.models.Role;
 import com.final_project.shopper.shopper.models.User;
@@ -25,4 +26,8 @@ public interface UserService {
     void updateUser(UserEditDto userEditDto);
 
     void deleteUserById(Long id);
+
+    UserDto findUserDtoByEmail(String userEmail);
+
+    boolean updateRewardPoint(String userEmail, Integer usedRewardPoint);
 }

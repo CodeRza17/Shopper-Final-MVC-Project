@@ -121,13 +121,13 @@
                                                 <a href="#" class="category"
                                                    th:text="${product.productCategory.name}">Category</a>
 
-                                                <p class="price">
-                            <span th:if="${product.discountPrice != null and product.discountPrice > 0}">
-                                <del th:text="'$' + ${product.price}">Old Price</del>
-                                <span class="text-danger" th:text="' $' + ${product.discountPrice}">New Price</span>
-                            </span>
-                                                    <span th:if="${product.discountPrice == null or product.discountPrice == 0}"
-                                                          th:text="'$' + ${product.price}">Price</span>
+                                                <p class="price" style="margin-top: 5px;">
+                            <span th:if="${product.discountPrice > 0}"
+                                  style="text-decoration: line-through; color: gray; margin-right: 8px;"
+                                  th:text="${'$' + #numbers.formatDecimal(product.price, 1, 2)}"></span>
+
+                                                    <span th:style="${product.discountPrice > 0} ? 'color: red; font-weight: bold;' : 'font-weight: bold;'"
+                                                          th:text="${'$' + #numbers.formatDecimal(product.discountPrice > 0 ? product.price * (1 - product.discountPrice) : product.price, 1, 2)}"></span>
                                                 </p>
                                             </div>
                                         </li>

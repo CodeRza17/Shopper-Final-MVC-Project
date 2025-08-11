@@ -1,14 +1,20 @@
 package com.final_project.shopper.shopper.controller;
 
 import com.final_project.shopper.shopper.dtos.basket.AddToCart;
+import com.final_project.shopper.shopper.dtos.basket.BasketDto;
 import com.final_project.shopper.shopper.dtos.basket.BasketUserDto;
+import com.final_project.shopper.shopper.dtos.order.OrderUserDto;
 import com.final_project.shopper.shopper.dtos.product.*;
 import com.final_project.shopper.shopper.dtos.sizes.SizeProductDetailDto;
+import com.final_project.shopper.shopper.dtos.user.UserDto;
+import com.final_project.shopper.shopper.models.Order;
 import com.final_project.shopper.shopper.payloads.PaginationPayload;
 import com.final_project.shopper.shopper.repositories.BrandRepository;
 import com.final_project.shopper.shopper.repositories.ProductCategoryRepository;
+import com.final_project.shopper.shopper.sendEmail.OrderEmailService;
 import com.final_project.shopper.shopper.sevices.*;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,15 +35,20 @@ public class ShopController {
     private final SizesService sizesService;
     private final BasketService basketService;
     private final UserService userService;
+    private final OrderService orderService;
+
+    @Autowired
+    private OrderEmailService orderEmailService;
 
 
-    public ShopController(ProductService productService, ProductCategoryService productCategoryService, ProductCategoryRepository productCategoryRepository, BrandRepository brandRepository, SizesService sizesService, BasketService basketService, UserService userService) {
+    public ShopController(ProductService productService, ProductCategoryService productCategoryService, ProductCategoryRepository productCategoryRepository, BrandRepository brandRepository, SizesService sizesService, BasketService basketService, UserService userService, OrderService orderService) {
         this.productService = productService;
         this.productCategoryRepository = productCategoryRepository;
         this.brandRepository = brandRepository;
         this.sizesService = sizesService;
         this.basketService = basketService;
         this.userService = userService;
+        this.orderService = orderService;
     }
 
 
@@ -125,8 +136,45 @@ public class ShopController {
 
     @GetMapping("/checkout")
     @PreAuthorize("isAuthenticated()")
-    public String checkout(){
+    public String checkout(Model model, Principal principal, HttpSession session){
+
+        String userEmail = principal.getName();
+        List<BasketDto> basketDtoList = basketService.getUserBaskets(userEmail);
+        UserDto userDto = userService.findUserDtoByEmail(userEmail);
+
+        model.addAttribute("user", userDto);
+        model.addAttribute("baskets", basketDtoList);
+
+        Double subTotalPrice = basketService.getSubTotalPrice(userEmail);
+
+        Integer usedRewardPoint = (Integer) session.getAttribute("usedRewardPoint");
+        if (usedRewardPoint == null) usedRewardPoint = 0;
+
+        Double result = subTotalPrice-usedRewardPoint+5;
+        model.addAttribute("subTotal", result);
+        session.setAttribute("subTotal", result);
+
         return "checkout.html";
+    }
+
+
+    @PostMapping("/checkout")
+    @PreAuthorize("isAuthenticated()")
+    public String checkout(OrderUserDto orderUserDto, Principal principal, HttpSession session){
+
+        String userEmail = principal.getName();
+        Integer usedRewardPoint = (Integer) session.getAttribute("usedRewardPoint");
+        if (usedRewardPoint == null) usedRewardPoint = 0;
+        boolean result2 = userService.updateRewardPoint(userEmail, usedRewardPoint);
+        Order order = orderService.orderProduct(userEmail, orderUserDto);
+        if (result2){
+            session.setAttribute("usedRewardPoint", 0);
+        }
+
+        Double totalPrice = (Double) session.getAttribute("subTotal");
+        orderEmailService.sendOrderConfirmationEmail(userEmail, order, totalPrice);
+        session.setAttribute("subTotal", 0);
+        return "redirect:/";
     }
 
     @GetMapping("/product/product-detail/{id}")

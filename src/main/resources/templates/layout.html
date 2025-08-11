@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html
         xmlns:th="http://www.thymeleaf.org"
-        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<html lang="en">
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+        lang="en">
 <head>
     <meta charset="utf-8">
     <title>Bootstrap E-commerce Templates</title>
@@ -20,7 +21,6 @@
     <link href="/front/themes/css/main.css" rel="stylesheet"/>
 
     <!-- scripts -->
-
     <script src="/front/themes/js/jquery-1.7.2.min.js"></script>
     <script src="/front/bootstrap/js/bootstrap.min.js"></script>
     <script src="/front/themes/js/superfish.js"></script>
@@ -35,7 +35,7 @@
     <div class="row">
         <div class="span4">
             <form method="POST" class="search_form">
-                <input type="text" class="input-block-level search-query" Placeholder="eg. T-sirt">
+                <input type="text" class="input-block-level search-query" placeholder="e.g. T-shirt">
             </form>
         </div>
         <div class="span8">
@@ -44,31 +44,45 @@
                     <li><a href="#">My Account</a></li>
                     <li><a href="/cart">Your Cart</a></li>
                     <li><a href="/checkout">Checkout</a></li>
-                    <li><a href="/login">Login</a></li>
+
+                    <!-- 👇 Show login if NOT authenticated -->
+                    <li sec:authorize="!isAuthenticated()">
+                        <a th:href="@{/login}">Login</a>
+                    </li>
+
+                    <!-- 👇 Show logout and username if authenticated -->
+                    <li sec:authorize="isAuthenticated()">
+                        <span>Welcome</span> |
+                        <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                        <form id="logout-form" th:action="@{/logout}" method="post" style="display: none;"></form>
+                    </li>
                 </ul>
             </div>
         </div>
     </div>
 </div>
+
 <div id="wrapper" class="container">
     <section class="navbar main-menu">
         <div class="navbar-inner main-menu">
             <a href="/" class="logo pull-left"><img src="/front/themes/images/logo.png" class="site_logo" alt=""></a>
             <nav id="menu" class="pull-right">
                 <ul>
-                    <li><a href="/products/women">Woman</a></li>
-                    <li><a href="/products/men">Man</a></li>
+                    <li><a href="/products/women">Women</a></li>
+                    <li><a href="/products/men">Men</a></li>
                     <li><a href="/products/children">Children</a></li>
                     <li><a href="/products/general">General</a></li>
                     <li><a href="/products/best-seller">Best Seller</a></li>
-                    <li><a href="./products.html">Top Seller</a></li>
+                    <li><a href="/products/top-seller">Top Seller</a></li>
                 </ul>
             </nav>
         </div>
     </section>
+
     <div layout:fragment="content">
         <script th:src="@{/resources/front/themes/js/cart.js}"></script>
     </div>
+
     <section id="footer-bar">
         <div class="row">
             <div class="span3">
@@ -76,7 +90,7 @@
                 <ul class="nav">
                     <li><a href="/index">Homepage</a></li>
                     <li><a href="./about.html">About Us</a></li>
-                    <li><a href="./contact.html">Contac Us</a></li>
+                    <li><a href="./contact.html">Contact Us</a></li>
                     <li><a href="./cart.html">Your Cart</a></li>
                     <li><a href="/login">Login</a></li>
                 </ul>
@@ -92,33 +106,35 @@
             </div>
             <div class="span5">
                 <p class="logo"><img src="/front/themes/images/logo.png" class="site_logo" alt=""></p>
-                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. the  Lorem Ipsum has been the industry's standard dummy text ever since the you.</p>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since.</p>
                 <br/>
                 <span class="social_icons">
-							<a class="facebook" href="#">Facebook</a>
-							<a class="twitter" href="#">Twitter</a>
-							<a class="skype" href="#">Skype</a>
-							<a class="vimeo" href="#">Vimeo</a>
-						</span>
+                    <a class="facebook" href="#">Facebook</a>
+                    <a class="twitter" href="#">Twitter</a>
+                    <a class="skype" href="#">Skype</a>
+                    <a class="vimeo" href="#">Vimeo</a>
+                </span>
             </div>
         </div>
     </section>
+
     <section id="copyright">
-        <span>Copyright 2013 bootstrappage template  All right reserved.</span>
+        <span>Copyright 2013 bootstrappage template. All rights reserved.</span>
     </section>
 </div>
+
 <script src="/front/themes/js/common.js"></script>
 <script src="/front/themes/js/jquery.flexslider-min.js"></script>
 <script type="text/javascript">
-    $(function() {
-        $(document).ready(function() {
+    $(function () {
+        $(document).ready(function () {
             $('.flexslider').flexslider({
                 animation: "fade",
                 slideshowSpeed: 4000,
                 animationSpeed: 600,
                 controlNav: false,
                 directionNav: true,
-                controlsContainer: ".flex-container" // the container that holds the flexslider
+                controlsContainer: ".flex-container"
             });
         });
     });

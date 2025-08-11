@@ -32,7 +32,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/api/**")
+                )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/dashboard/**")
                         .hasAnyRole("SUPER_ADMIN", "OWNER", "MANAGER", "ADMIN")
@@ -47,8 +49,11 @@ public class SecurityConfig {
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login")
                         .permitAll()
-                );
+                )
+                .exceptionHandling(exception -> exception.accessDeniedPage("/error/403"));
 
         return http.build();
     }
+
+
 }

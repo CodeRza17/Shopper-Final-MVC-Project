@@ -37,4 +37,6 @@ public interface ProductService {
     List<RelatedProductsDto> getRelatedProducts(Long id);
 
     Product findProductById(Long productId);
+
+    void removeQuantityById(Long id, Integer quantity);
 }

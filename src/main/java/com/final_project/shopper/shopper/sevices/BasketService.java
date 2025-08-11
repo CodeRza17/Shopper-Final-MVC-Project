@@ -1,6 +1,7 @@
 package com.final_project.shopper.shopper.sevices;
 
 import com.final_project.shopper.shopper.dtos.basket.AddToCart;
+import com.final_project.shopper.shopper.dtos.basket.BasketDto;
 import com.final_project.shopper.shopper.dtos.basket.BasketUserDto;
 
 import java.util.List;
@@ -13,4 +14,8 @@ public interface BasketService {
     boolean removeCartItem(Long cartId, String email);
 
     Double getSubTotalPrice(String email);
+
+    List<BasketDto> getUserBaskets(String userEmail);
+
+    void removeUserBasket(Long id);
 }

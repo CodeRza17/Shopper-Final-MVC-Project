@@ -2,28 +2,29 @@ package com.final_project.shopper.shopper.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "baskets")
-public class Basket {
+@Table(name = "orders_products")
+public class OrderProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private  Integer quantity;
+    private Double price;
+    private Integer quantity;
 
+
+    @ManyToOne
+    private Order order;
     @ManyToOne
     private Product product;
 
-    @ManyToOne
-    private User user;
-
+    private Double totalPrice;
 
 }

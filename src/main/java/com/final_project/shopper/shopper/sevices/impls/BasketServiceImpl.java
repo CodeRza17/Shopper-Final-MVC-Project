@@ -1,6 +1,7 @@
 package com.final_project.shopper.shopper.sevices.impls;
 
 import com.final_project.shopper.shopper.dtos.basket.AddToCart;
+import com.final_project.shopper.shopper.dtos.basket.BasketDto;
 import com.final_project.shopper.shopper.dtos.basket.BasketUserDto;
 import com.final_project.shopper.shopper.models.Basket;
 import com.final_project.shopper.shopper.models.Product;
@@ -38,7 +39,7 @@ public class BasketServiceImpl implements BasketService {
             User findUser = userService.findUserByEmail(email);
             Product findProduct = productService.findProductById(addToCart.getProductId());
             Basket findBasketProduct = basketRepository.findByProductIdAndUserId(addToCart.getProductId(), findUser.getId());
-            Double quantity = addToCart.getQuantity() == null ? 1 : addToCart.getQuantity();
+            Integer quantity = addToCart.getQuantity() == null ? 1 : addToCart.getQuantity();
 
             if (findBasketProduct == null){
 
@@ -48,7 +49,7 @@ public class BasketServiceImpl implements BasketService {
                 basket.setProduct(findProduct);
                 basketRepository.save(basket);
             }else {
-                Double totalQuantity = findBasketProduct.getQuantity() + quantity;
+                Integer totalQuantity = findBasketProduct.getQuantity() + quantity;
                 findBasketProduct.setQuantity(totalQuantity);
                 basketRepository.save(findBasketProduct);
             }
@@ -92,5 +93,19 @@ public class BasketServiceImpl implements BasketService {
             result += basket.getTotalPrice();
         }
         return result;
+    }
+
+    @Override
+    public List<BasketDto> getUserBaskets(String userEmail) {
+        User user = userService.findUserByEmail(userEmail);
+        List<Basket> basketList = user.getBaskets();
+        List<BasketDto> basketDtoList = basketList.stream().map(product -> modelMapper.map(product, BasketDto.class)).collect(Collectors.toList());
+        return basketDtoList;
+    }
+
+    @Override
+    public void removeUserBasket(Long id) {
+        List<Basket> basketList = basketRepository.findByUserId(id);
+        basketRepository.deleteAll(basketList);
     }
 }

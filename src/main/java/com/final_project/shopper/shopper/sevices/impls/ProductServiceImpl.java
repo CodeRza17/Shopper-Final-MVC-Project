@@ -14,7 +14,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -287,6 +286,13 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product findProductById(Long productId) {
         return productRepository.findById(productId).orElseThrow();
+    }
+
+    @Override
+    public void removeQuantityById(Long id, Integer quantity) {
+        Product product = productRepository.findById(id).orElseThrow();
+        product.setCountStock((product.getCountStock()-quantity));
+        productRepository.save(product);
     }
 
 

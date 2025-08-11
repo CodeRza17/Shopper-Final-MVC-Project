@@ -18,6 +18,8 @@
                 <h4 class="title"><span class="text"><strong>Create</strong> Company</span></h4>
                 <form th:action="@{/create-company}" method="post" class="form-stacked">
                     <fieldset>
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
                         <div class="control-group">
                             <label class="control-label">Name of Company</label>
                             <div class="controls">

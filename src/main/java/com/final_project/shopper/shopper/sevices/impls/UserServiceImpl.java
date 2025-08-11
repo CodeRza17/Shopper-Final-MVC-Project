@@ -3,6 +3,7 @@ package com.final_project.shopper.shopper.sevices.impls;
 
 import com.final_project.shopper.shopper.dtos.auth.UserRegisterDto;
 import com.final_project.shopper.shopper.dtos.user.UserDashboardDto;
+import com.final_project.shopper.shopper.dtos.user.UserDto;
 import com.final_project.shopper.shopper.dtos.user.UserEditDto;
 import com.final_project.shopper.shopper.models.Brand;
 import com.final_project.shopper.shopper.models.Role;
@@ -17,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -89,7 +89,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
     @Override
     public User findUserByEmail(String username) {
         return userRepository.findByEmail(username);
@@ -148,6 +147,38 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
+    @Override
+    public UserDto findUserDtoByEmail(String userEmail) {
+        User user = userRepository.findByEmail(userEmail);
+        UserDto userDto = modelMapper.map(user, UserDto.class);
+        return userDto;
+    }
 
+    @Override
+    public boolean updateRewardPoint(String userEmail, Integer usedRewardPoint) {
+
+            User user = userRepository.findByEmail(userEmail);
+
+            if (user != null) {
+                Double currentRewardPoint = user.getRewardPoint();
+                if (currentRewardPoint == null) {
+                    currentRewardPoint = 0.0;
+                }
+
+
+                double updatedRewardPoint = currentRewardPoint - usedRewardPoint.doubleValue();
+                if (updatedRewardPoint < 0) {
+                    updatedRewardPoint = 0.0;
+                }
+
+                user.setRewardPoint(updatedRewardPoint);
+                userRepository.save(user);
+            } else {
+                throw new RuntimeException("User not found with email: " + userEmail);
+            }
+
+
+        return true;
+    }
 }
 

@@ -9,5 +9,5 @@ import java.util.List;
 public interface BasketRepository extends JpaRepository<Basket, Long> {
     Basket findByProductIdAndUserId(Long productId, Long id);
 
-    List<Basket> findByUserId(Long id);
+    List<Basket> findByUserId(Long userId);
 }
