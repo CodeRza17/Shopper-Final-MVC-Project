@@ -49,6 +49,7 @@
                     </div>
                     <div class="span5">
                         <form class="form-inline" action="/addToCart" method="post" th:object="${addToCart}">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                             <p>&nbsp;</p>
                             <label>Qty:</label>
                             <input type="number" name="quantity" class="span1" value="1" min="1">

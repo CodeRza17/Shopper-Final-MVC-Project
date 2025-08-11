@@ -67,7 +67,7 @@
   <div class="form-container">
     <h2>Create New Product</h2>
     <form th:action="@{/dashboard/product/create}" th:object="${productCreateDto}" method="post" id="productForm">
-
+      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
       <!-- Basic Info -->
       <div class="form-group">
         <label class="form-label" for="name">Product Name</label>

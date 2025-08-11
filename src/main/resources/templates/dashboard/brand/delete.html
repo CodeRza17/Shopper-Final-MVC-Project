@@ -15,6 +15,7 @@
   <h4 th:text="*{name}">Brand Name</h4>
 
   <form method="post" th:action="@{/dashboard/brand/delete}" th:object="${brand}">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
     <input type="hidden" th:field="*{id}" />
     <button type="submit" class="btn btn-danger">Delete</button>
     <a th:href="@{/dashboard/brand}" class="btn btn-secondary">Cancel</a>

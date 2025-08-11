@@ -36,7 +36,9 @@
 			<div class="span7">
 				<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
 				<form method="post" action="#">
+
 					<fieldset>
+						<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 						<div class="clearfix">
 							<label for="name"><span>Name:</span></label>
 							<div class="input">

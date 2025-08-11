@@ -17,6 +17,7 @@
 		<div class="row">
 			<div class="span12">
 				<form method="post" th:action="@{/checkout}">
+					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 					<div class="accordion" id="accordion2">
 
 						<!-- Account & Billing Details -->

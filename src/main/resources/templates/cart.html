@@ -99,6 +99,7 @@
 					</p>
 
 					<form id="rewardPointForm" th:action="@{/cart/use-reward}" method="post">
+						<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 						<label for="rewardPointInput">
 							Enter points (max: <span id="maxRewardPoint" th:text="${rewardPoint}">0</span>):
 						</label>
