@@ -34,9 +34,9 @@
 <div id="top-bar" class="container">
     <div class="row">
         <div class="span4">
-            <form method="POST" class="search_form">
+            <form method="POST" th:action="@{/search}" class="search_form">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                <input type="text" class="input-block-level search-query" placeholder="e.g. T-shirt">
+                <input type="text" name="keyword" class="input-block-level search-query" placeholder="e.g. T-shirt">
             </form>
         </div>
         <div class="span8">
@@ -76,7 +76,6 @@
                     <li><a href="/products/children">Children</a></li>
                     <li><a href="/products/general">General</a></li>
                     <li><a href="/products/best-seller">Best Seller</a></li>
-                    <li><a href="/products/top-seller">Top Seller</a></li>
                 </ul>
             </nav>
         </div>

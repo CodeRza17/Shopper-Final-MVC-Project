@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Results</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <section class="header_text sub">
+        <h4>
+            <span>Search results for "<span th:text="${keyword}"></span>"</span>
+        </h4>
+    </section>
+
+    <section class="main-content">
+        <div class="row">
+            <div class="span9">
+                <!-- heç nə tapılmadıqda -->
+                <div th:if="${#lists.isEmpty(results)}">
+                    <p>No products found.</p>
+                </div>
+
+                <!-- nəticələrin grid-də göstərilməsi -->
+                <ul class="product-grid" style="
+                        display: grid;
+                        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                        gap: 20px;
+                        padding: 0;
+                        list-style: none;">
+                    <li th:each="product : ${results}" class="product-item"
+                        style="position: relative; background: #fff; padding: 10px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05); text-align: center;">
+
+                        <!-- discount badge -->
+                        <span th:if="${product.discountPrice > 0}"
+                              style="position: absolute; top: 10px; right: 10px; background-color: red; color: white; padding: 5px 8px; border-radius: 4px; font-weight: bold; font-size: 14px;"
+                              th:text="'-' + ${#numbers.formatDecimal(product.discountPrice * 100, 0, 0)} + '%'"></span>
+
+                        <!-- şəkil -->
+                        <a th:href="@{'/product/product-detail/' + ${product.id}}">
+                            <img th:src="${product.photoUrl}" alt="Product Image"
+                                 style="width: 100%; height: auto; border-radius: 5px;">
+                        </a>
+
+                        <!-- ad -->
+                        <a th:href="@{'/product/product-detail/' + ${product.id}}"
+                           class="title" th:text="${product.name}"
+                           style="display: block; margin-top: 10px; font-weight: bold; text-decoration: none; color: black;"></a>
+
+                        <!-- qiymət -->
+                        <p class="price" style="margin-top: 5px;">
+                            <span th:if="${product.discountPrice > 0}"
+                                  style="text-decoration: line-through; color: gray; margin-right: 8px;"
+                                  th:text="${'$' + #numbers.formatDecimal(product.price, 1, 2)}"></span>
+
+                            <span th:style="${product.discountPrice > 0} ? 'color: red; font-weight: bold;' : 'font-weight: bold;'"
+                                  th:text="${'$' + #numbers.formatDecimal(product.discountPrice > 0 ? product.price * (1 - product.discountPrice) : product.price, 1, 2)}"></span>
+                        </p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>

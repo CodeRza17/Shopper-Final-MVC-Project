@@ -295,5 +295,10 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(product);
     }
 
+    @Override
+    public List<Product> searchByName(String keyword) {
+        return productRepository.findByNameContainingIgnoreCase(keyword);
+    }
+
 
 }

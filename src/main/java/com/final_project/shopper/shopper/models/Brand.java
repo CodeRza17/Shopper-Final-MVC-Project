@@ -32,4 +32,8 @@ public class Brand {
 
     @OneToMany(mappedBy = "brand")
     private List<User> users = new ArrayList<>();
+
+    @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL)
+    private List<Ad> ads;
+
 }

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{owner-dashboard/layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>Payment Infos</title>
+</head>
+<body>
+<div layout:fragment="content" class="container mt-4">
+
+  <!-- Add Payment Info Button -->
+  <div class="mb-3">
+    <a href="/owner-dashboard/ad-payment-infos/add" class="btn btn-primary">Add Payment Info</a>
+  </div>
+
+  <!-- Payment Infos Table -->
+  <table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+      <th>Time Count</th>
+      <th>Time Type</th>
+      <th>Amount</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="paymentInfo : ${paymentInfos}">
+      <td th:text="${paymentInfo.timeCount}">10</td>
+      <td th:text="${paymentInfo.timeType}">DAY</td>
+      <td th:text="${paymentInfo.amount} + '$'">20.0</td>
+      <td>
+        <!-- Form vasitəsilə DELETE -->
+        <form th:action="@{/owner-dashboard/ad-payment-infos/{id}(id=${paymentInfo.id})}" method="post" style="display:inline;">
+          <input type="hidden" name="_method" value="delete"/>
+          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+          <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+</div>
+</body>
+</html>

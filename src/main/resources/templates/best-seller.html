@@ -4,7 +4,7 @@
       layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
-    <title>Top Seller</title>
+    <title>Best Seller</title>
     <!-- HEAD hissəsində əlavə et -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -81,7 +81,7 @@
 <body>
 <div layout:fragment="content">
     <section class="header_text sub">
-        <h4><span>New products</span></h4>
+        <h4><span>Best products</span></h4>
     </section>
 
     <section class="main-content">
@@ -96,7 +96,12 @@
                 </p>
 
 
-                <p th:text="${product.price} + '$'" class="price"></p>
+                <span th:if="${product.discountPrice > 0}"
+                      style="text-decoration: line-through; color: gray; margin-right: 8px;"
+                      th:text="${'$' + #numbers.formatDecimal(product.price, 1, 2)}"></span>
+
+                <span th:style="${product.discountPrice > 0} ? 'color: red; font-weight: bold;' : 'font-weight: bold;'"
+                      th:text="${'$' + #numbers.formatDecimal(product.discountPrice > 0 ? product.price * (1 - product.discountPrice) : product.price, 1, 2)}"></span>
             </div>
         </div>
     </section>

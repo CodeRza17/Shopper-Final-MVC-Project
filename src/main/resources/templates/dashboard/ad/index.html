@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{dashboard/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Ads</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+<div layout:fragment="content" class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Ads</h2>
+        <a th:href="@{/dashboard/ad/create}" class="btn btn-primary btn-sm">Add Ad</a>
+    </div>
+
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Photo</th>
+            <th>Activation Date</th>
+            <th>Active</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="ad : ${ads}">
+            <td>
+                <img th:src="${ad.photoUrl}" alt="Ad Photo" style="width:100px; height:auto;">
+            </td>
+            <td th:text="${ad.activationDate != null ? #temporals.format(ad.activationDate, 'yyyy-MM-dd HH:mm') : '---'}"></td>
+            <td>
+                <span th:text="${ad.active == true ? 'Yes' : 'No'}"></span>
+            </td>
+            <td>
+                <form th:action="@{'/dashboard/ad/delete/' + ${ad.id}}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </td>
+
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>

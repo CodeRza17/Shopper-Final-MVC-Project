@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{dashboard/layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Ad</title>
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+<div layout:fragment="content" class="container mt-4">
+
+  <h2>Create New Ad</h2>
+
+  <form th:action="@{/dashboard/ad/create}" method="post" class="mt-3">
+
+    <!-- Photo URL -->
+    <div class="mb-3">
+      <label for="photoUrl" class="form-label">Photo URL</label>
+      <input type="text" class="form-control" id="photoUrl" name="photoUrl" required>
+    </div>
+
+    <!-- Time Option -->
+    <div class="mb-3">
+      <label for="adPaymentInfo" class="form-label">Ad Duration</label>
+      <select class="form-select" id="adPaymentInfo" name="adPaymentInfoId" required>
+        <option value="" disabled selected>Select duration</option>
+        <option th:each="info : ${ads}"
+                th:value="${info.id}"
+                th:text="${info.timeCount + ' ' + info.timeType + ' - $' + info.amount}">
+        </option>
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-success">Create</button>
+    <a th:href="@{/dashboard/ad}" class="btn btn-secondary">Cancel</a>
+  </form>
+
+</div>
+</body>
+</html>

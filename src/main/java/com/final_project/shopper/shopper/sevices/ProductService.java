@@ -39,4 +39,6 @@ public interface ProductService {
     Product findProductById(Long productId);
 
     void removeQuantityById(Long id, Integer quantity);
+
+    List<Product> searchByName(String keyword);
 }
