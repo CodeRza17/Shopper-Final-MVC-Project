@@ -15,6 +15,7 @@ public class BasketDto {
     private Long id;
     private int quantity;
     private ProductBasketDto product;
+    private String size;
 
     private Double totalPrice;
 

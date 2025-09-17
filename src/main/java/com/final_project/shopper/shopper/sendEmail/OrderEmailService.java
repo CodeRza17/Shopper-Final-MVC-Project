@@ -30,7 +30,7 @@ public class OrderEmailService {
         List<OrderProduct> orderProducts = orderProductRepository.findAllByOrderId(order.getId());
 
         for (OrderProduct item : orderProducts) {
-            emailContent.append("- " + item.getProduct().getName() + " x " + item.getQuantity() +
+            emailContent.append("- " + item.getProduct().getName() + " x " + item.getSize() + item.getQuantity() +
                     " = " + item.getQuantity()*item.getProduct().getPrice()*item.getProduct().getDiscountPrice() + " USD\n");
         }
 

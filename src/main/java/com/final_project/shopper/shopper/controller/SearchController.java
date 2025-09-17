@@ -1,7 +1,7 @@
 package com.final_project.shopper.shopper.controller;
 
 import com.final_project.shopper.shopper.models.Product;
-import com.final_project.shopper.shopper.sevices.ProductService;
+import com.final_project.shopper.shopper.services.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;

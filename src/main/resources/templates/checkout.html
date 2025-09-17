@@ -106,6 +106,7 @@
 											<th>Image</th>
 											<th>Product</th>
 											<th>Quantity</th>
+											<th>Size</th>
 											<th>Unit Price</th>
 											<th>Total</th>
 										</tr>
@@ -117,6 +118,7 @@
 											</td>
 											<td th:text="${basket.product.name}"></td>
 											<td th:text="${basket.quantity}"></td>
+											<td th:text="${basket.size}"></td>
 											<td th:text="${#numbers.formatDecimal(basket.product.resultPrice, 0, 2)} + ' $'"></td>
 											<td th:text="${#numbers.formatDecimal(basket.totalPrice, 0, 2)} + ' $'"></td>
 										</tr>

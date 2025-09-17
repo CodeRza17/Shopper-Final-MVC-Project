@@ -25,6 +25,7 @@
 						<th>Image</th>
 						<th>Product Name</th>
 						<th>Quantity</th>
+						<th>Size</th>
 						<th>Unit Price</th>
 						<th>Total</th>
 					</tr>
@@ -50,6 +51,7 @@
 						<td th:text="${basket.product.name}">Fusce id molestie massa</td>
 
 						<td th:text="${basket.quantity}"><input type="text" placeholder="1" class="input-mini"></td>
+						<td th:text="${basket.size}">Fusce id molestie massa</td>
 
 						<!-- ✅ Endirimli qiymət göstərilməsi -->
 						<td>
@@ -80,12 +82,8 @@
 				</table>
 
 				<h4>What would you like to do next?</h4>
-				<p>Choose if you have a discount code or reward points you want to use.</p>
-
-				<label class="radio">
-					<input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="">
-					Use Coupon Code
-				</label>
+				<p>Choose if you have reward points you want to use.</p>
+				
 
 				<div class="reward-point-box" style="margin-top: 20px;" th:if="${rewardPoint > 0}">
 					<p><strong>You can use your reward points</strong></p>

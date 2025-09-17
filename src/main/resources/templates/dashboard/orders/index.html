@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{dashboard/layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+  <style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+<div layout:fragment="content">
+
+  <h2>Orders Table</h2>
+  <table>
+    <thead>
+    <tr>
+      <th>Photo</th>
+      <th>Product Name</th>
+      <th>Size</th>
+      <th>Product Code</th>
+      <th>Price</th>
+      <th>Quantity</th>
+      <th>Total Amount</th>
+      <th>Date</th>
+      <th>Customer Name</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Thymeleaf loop example -->
+    <tr th:each="orderProduct : ${orderProducts}">
+      <td><img th:src="@{${orderProduct.product.photoUrl}}" alt="Product Photo"></td>
+      <td th:text="${orderProduct.product.name}">Product Name</td>
+      <td th:text="${orderProduct.size}">Size</td>
+      <td th:text="${orderProduct.product.productCode}">Product Code</td>
+      <td th:text="${#numbers.formatDecimal(
+        orderProduct.product.discountPrice > 0 ?
+        orderProduct.product.price * (1 - orderProduct.product.discountPrice) :
+        orderProduct.product.price, 1, 2
+    )}">
+        Price
+      </td>
+
+
+      <td th:text="${orderProduct.quantity}">Quantity</td>
+      <td th:text="${#numbers.formatDecimal(
+    (orderProduct.product.discountPrice > 0
+        ? orderProduct.product.price * (1 - orderProduct.product.discountPrice)
+        : orderProduct.product.price)
+    * orderProduct.quantity, 1, 2
+)}">
+        Total Amount
+      </td>
+
+
+      <td th:text="${#dates.format(orderProduct.order.orderDate, 'yyyy-MM-dd')}">Date</td>
+      <td th:text="${orderProduct.order.user.name}+' '+${orderProduct.order.user.surname}">Customer Name</td>
+    </tr>
+    </tbody>
+  </table>
+
+</div>
+</body>
+</html>

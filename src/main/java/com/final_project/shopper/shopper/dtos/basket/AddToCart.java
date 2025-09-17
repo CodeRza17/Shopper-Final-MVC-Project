@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 public class AddToCart {
     private Long productId;
     private Integer quantity;
+    private String size;
 }

@@ -8,9 +8,10 @@ import com.final_project.shopper.shopper.models.Brand;
 import com.final_project.shopper.shopper.models.User;
 import com.final_project.shopper.shopper.repositories.ProductRepository;
 import com.final_project.shopper.shopper.repositories.UserRepository;
-import com.final_project.shopper.shopper.sevices.ProductService;
+import com.final_project.shopper.shopper.services.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,12 +30,14 @@ public class ProductController {
     private final ProductRepository productRepository;
 
     @GetMapping("/dashboard/products")
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_MANAGER')")
     public String index(Model model){
         List<ProductDashboardDto> productDashboardDtos = productService.getACurrentBrandAllProducts();
         model.addAttribute("products", productDashboardDtos);
         return "dashboard/product/index.html";
     }
     @GetMapping("/dashboard/product/create")
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_MANAGER')")
     public String create(Model model){
         model.addAttribute("productCreateDto", new ProductCreateDto());
         model.addAttribute("audienceCategories", productService.getAllAudienceCategories());
@@ -45,6 +48,7 @@ public class ProductController {
 
 
     @PostMapping("/dashboard/product/create")
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_MANAGER')")
     public String create(ProductCreateDto productCreateDto){
         boolean result = productService.createProduct(productCreateDto);
         if (result){
@@ -54,6 +58,7 @@ public class ProductController {
     }
 
     @GetMapping("/dashboard/product/update/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_MANAGER')")
     public String update(@PathVariable Long id, Model model, Principal principal){
         Brand brand = productRepository.findById(id).orElseThrow().getBrand();
         List<User> users = userRepository.findAllByBrandId(brand.getId());
@@ -73,6 +78,7 @@ public class ProductController {
         return "dashboard/product/update.html";
     }
     @PostMapping("/dashboard/product/update/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_MANAGER')")
     public String update(@PathVariable Long id, @ModelAttribute("product") ProductUpdateDto productUpdateDto, Model model){
         boolean result = productService.updateProduct(id, productUpdateDto);
         if (result){
@@ -85,6 +91,7 @@ public class ProductController {
         }
     }
     @GetMapping("/dashboard/product/delete/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_MANAGER')")
     public String delete(@PathVariable Long id, Model model, Principal principal){
         Brand brand = productRepository.findById(id).orElseThrow().getBrand();
         List<User> users = userRepository.findAllByBrandId(brand.getId());
@@ -102,6 +109,7 @@ public class ProductController {
     }
 
     @PostMapping("/dashboard/product/delete/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_MANAGER')")
     public String delete(@PathVariable Long id){
         boolean result = productService.deleteProduct(id);
         if (result){

@@ -31,39 +31,47 @@
                         </address>
                         <h4>
                             <strong>
-        <span th:if="${product.discountPrice > 0}">
-            <span style="text-decoration: line-through; color: gray; font-weight: normal;">
-                $<span th:text="${#numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')}"></span>
-            </span>
-            &nbsp;
-            <span style="color: #d9534f;">
-                $<span
-                    th:text="${#numbers.formatDecimal(product.price * product.discountPrice, 1, 'COMMA', 2, 'POINT')}"></span>
-            </span>
-        </span>
+                                <span th:if="${product.discountPrice > 0}">
+                                    <span style="text-decoration: line-through; color: gray; font-weight: normal;">
+                                        $<span th:text="${#numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')}"></span>
+                                    </span>
+                                    &nbsp;
+                                    <span style="color: #d9534f;">
+                                        $<span
+                                            th:text="${#numbers.formatDecimal(product.price * (1-product.discountPrice), 1, 'COMMA', 2, 'POINT')}"></span>
+                                    </span>
+                                </span>
                                 <span th:if="${product.discountPrice <= 0}">
-            $<span th:text="${#numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')}"></span>
-        </span>
+                                    $<span th:text="${#numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')}"></span>
+                                </span>
                             </strong>
                         </h4>
                     </div>
                     <div class="span5">
                         <form class="form-inline" action="/addToCart" method="post" th:object="${addToCart}">
                             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                            <p>&nbsp;</p>
-                            <label>Qty:</label>
-                            <input type="number" name="quantity" class="span1" value="1" min="1">
 
-                            <!-- Burada Thymeleaf sintaksisi ilə value verilir -->
+                            <p>&nbsp;</p>
+                            <label for="quantity">Qty:</label>
+                            <input type="number" name="quantity" id="quantity" class="span1" value="1" min="1">
+
                             <input type="hidden" name="productId" th:value="${product.id}">
 
+                            <!-- Yeni size seçimi -->
+                            <label for="size">Size:</label>
+                            <select name="size" id="size" required>
+                                <option value="">-- Select Size --</option>
+                                <option th:each="size : ${sizes}"
+                                        th:value="${size.size}"
+                                        th:text="${size.size + ' (' + size.quantity + ')'}">
+                                </option>
+                            </select>
 
                             <button class="btn btn-inverse" type="submit">Add to cart</button>
                         </form>
                     </div>
-
-
                 </div>
+
                 <div class="row">
                     <div class="span9">
                         <ul class="nav nav-tabs" id="myTab">
@@ -80,12 +88,11 @@
                                     <tr>
                                         <th>Sizes</th>
                                         <td>
-        <span th:each="size : ${sizes}">
-            <span th:text="'  '+${size.size} + ' (' + ${size.quantity} + ')'+'  '"></span>
-        </span>
+                                            <span th:each="size : ${sizes}">
+                                                <span th:text="'  '+${size.size} + ' (' + ${size.quantity} + ')'+'  '"></span>
+                                            </span>
                                         </td>
                                     </tr>
-
                                     <tr class="alt">
                                         <th>Colour</th>
                                         <td th:text="${product.color}">Orange, Yellow</td>
@@ -96,22 +103,21 @@
                         </div>
                     </div>
 
-                    <!-- Related Products hissəsi (dəyişilməyib) -->
+                    <!-- Related Products hissəsi -->
                     <div class="span9">
                         <br>
                         <h4 class="title">
                             <span class="pull-left"><span class="text"><strong>Related</strong> Products</span></span>
                             <span class="pull-right">
-										<a class="left button" href="#relatedCarousel" data-slide="prev"></a><a class="right button" href="#relatedCarousel" data-slide="next"></a>
-									</span>
+                                <a class="left button" href="#relatedCarousel" data-slide="prev"></a>
+                                <a class="right button" href="#relatedCarousel" data-slide="next"></a>
+                            </span>
                         </h4>
                         <div id="relatedCarousel" class="carousel slide">
                             <div class="carousel-inner">
-
                                 <div th:each="group, stat : ${rlProductGroups}"
                                      th:class="'item' + (${stat.index} == 0 ? ' active' : '')">
                                     <ul class="thumbnails listing-products">
-
                                         <li class="span3" th:each="product : ${group}">
                                             <div class="product-box">
                                                 <a th:href="@{'/product/product-detail/' + ${product.id}}">
@@ -123,36 +129,31 @@
                                                    th:text="${product.productCategory.name}">Category</a>
 
                                                 <p class="price" style="margin-top: 5px;">
-                            <span th:if="${product.discountPrice > 0}"
-                                  style="text-decoration: line-through; color: gray; margin-right: 8px;"
-                                  th:text="${'$' + #numbers.formatDecimal(product.price, 1, 2)}"></span>
-
+                                                    <span th:if="${product.discountPrice > 0}"
+                                                          style="text-decoration: line-through; color: gray; margin-right: 8px;"
+                                                          th:text="${'$' + #numbers.formatDecimal(product.price, 1, 2)}"></span>
                                                     <span th:style="${product.discountPrice > 0} ? 'color: red; font-weight: bold;' : 'font-weight: bold;'"
-                                                          th:text="${'$' + #numbers.formatDecimal(product.discountPrice > 0 ? product.price * (1 - product.discountPrice) : product.price, 1, 2)}"></span>
+                                                          th:text="${'$' + #numbers.formatDecimal(product.discountPrice > 0 ? product.price * (1-product.discountPrice) : product.price, 1, 2)}"></span>
                                                 </p>
                                             </div>
                                         </li>
-
                                     </ul>
                                 </div>
-
                             </div>
-
                         </div>
-
                     </div>
                 </div>
             </div>
 
-            <!-- Sidebar hissəsi (dəyişilməyib) -->
+            <!-- Sidebar hissəsi -->
             <div class="span3 col">
                 <div class="block">
                     <h4 class="title">
                         <span class="pull-left"><span class="text">Randomize</span></span>
                         <span class="pull-right">
-							<a class="left button" href="#myCarousel" data-slide="prev"></a>
-							<a class="right button" href="#myCarousel" data-slide="next"></a>
-						</span>
+                            <a class="left button" href="#myCarousel" data-slide="prev"></a>
+                            <a class="right button" href="#myCarousel" data-slide="next"></a>
+                        </span>
                     </h4>
                     <div id="myCarousel" class="carousel slide">
                         <div class="carousel-inner">
@@ -164,10 +165,8 @@
                                             <span class="sale_tag"></span>
                                             <img th:src="${rdProduct.photoUrl}" alt=""
                                                  src="/front/themes/images/ladies/1.jpg"><br/>
-                                            <a th:text="${rdProduct.name}" th:href="@{'/product/product-detail/' + ${rdProduct.id}}" class="title">Fusce
-                                                id molestie massa</a><br/>
-                                            <a th:text="${rdProduct.productCategory.name}" href="#" class="category">Suspendisse
-                                                aliquet</a>
+                                            <a th:text="${rdProduct.name}" th:href="@{'/product/product-detail/' + ${rdProduct.id}}" class="title">Fusce id molestie massa</a><br/>
+                                            <a th:text="${rdProduct.productCategory.name}" href="#" class="category">Suspendisse aliquet</a>
                                             <p th:text="${rdProduct.price}+'$'" class="price">$261</p>
                                         </div>
                                     </li>
@@ -193,5 +192,8 @@
         </div>
     </section>
 </div>
+
+<!-- JS faylı çağırırıq -->
+<script src="/front/themes/js/product-detail.js"></script>
 </body>
 </html>

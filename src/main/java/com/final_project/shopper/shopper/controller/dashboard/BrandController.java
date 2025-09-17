@@ -4,15 +4,14 @@ import com.final_project.shopper.shopper.dtos.brand.BrandDashboardDto;
 import com.final_project.shopper.shopper.dtos.brand.BrandDeleteDto;
 import com.final_project.shopper.shopper.dtos.brand.BrandUpdateDto;
 import com.final_project.shopper.shopper.dtos.contactInfo.ContactInfoDto;
-import com.final_project.shopper.shopper.sevices.BrandService;
-import com.final_project.shopper.shopper.sevices.ContactInfoService;
+import com.final_project.shopper.shopper.services.BrandService;
+import com.final_project.shopper.shopper.services.ContactInfoService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 @Controller
@@ -33,6 +32,7 @@ public class BrandController {
     }
 
     @GetMapping("/dashboard/brand/update")
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     public String brandUpdate(Model model){
         BrandUpdateDto brandUpdateDto = brandService.getUpdatedBrand();
         ContactInfoDto contactInfoDto = contactInfoService.getUpdatedContactInfos();
@@ -41,6 +41,7 @@ public class BrandController {
         return "dashboard/brand/update.html";
     }
     @PostMapping("/dashboard/brand/update")
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     public String brandUpdate( BrandUpdateDto brandUpdateDto, ContactInfoDto contactInfoDto){
         boolean result = brandService.UpdateBrand( brandUpdateDto,contactInfoDto);
         if (result){
@@ -50,6 +51,7 @@ public class BrandController {
     }
 
     @GetMapping("/dashboard/brand/delete")
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     public String delete(Model model) {
         BrandDeleteDto brandDeleteDto = brandService.getDeletedBrand();
         if (brandDeleteDto == null) {
@@ -61,6 +63,7 @@ public class BrandController {
     }
 
     @PostMapping("/dashboard/brand/delete")
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     public String delete(){
         boolean result = brandService.deleteBrand();
         if (result){

@@ -20,6 +20,6 @@ public class ProductBasketDto {
         if (discountPrice == null || discountPrice == 0){
             discountPrice = 1.0;
         }
-        return price*discountPrice;
+        return price*(1-discountPrice);
     }
 }

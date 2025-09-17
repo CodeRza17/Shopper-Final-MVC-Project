@@ -12,7 +12,7 @@ import com.final_project.shopper.shopper.payloads.PaginationPayload;
 import com.final_project.shopper.shopper.repositories.BrandRepository;
 import com.final_project.shopper.shopper.repositories.ProductCategoryRepository;
 import com.final_project.shopper.shopper.sendEmail.OrderEmailService;
-import com.final_project.shopper.shopper.sevices.*;
+import com.final_project.shopper.shopper.services.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -246,6 +246,13 @@ public class ShopController {
 
         model.addAttribute("bsProduct", productBsDtoList);
         return "best-seller";
+    }
+
+    @GetMapping("/order-history")
+    @PreAuthorize("isAuthenticated()")
+    public String orderHistory(Principal principal, Model model) {
+        model.addAttribute("orders", orderService.getOrdersByUser(principal.getName()));
+        return "order-history";
     }
 
 

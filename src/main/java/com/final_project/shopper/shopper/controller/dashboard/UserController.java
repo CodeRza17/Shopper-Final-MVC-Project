@@ -6,7 +6,7 @@ import com.final_project.shopper.shopper.models.Role;
 import com.final_project.shopper.shopper.models.User;
 import com.final_project.shopper.shopper.repositories.RoleRepository;
 import com.final_project.shopper.shopper.repositories.UserRepository;
-import com.final_project.shopper.shopper.sevices.UserService;
+import com.final_project.shopper.shopper.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;

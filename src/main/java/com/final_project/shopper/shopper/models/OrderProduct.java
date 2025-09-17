@@ -27,4 +27,7 @@ public class OrderProduct {
 
     private Double totalPrice;
 
+    private String size;
+
+
 }

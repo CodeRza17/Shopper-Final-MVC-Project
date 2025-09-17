@@ -15,6 +15,7 @@ public class BasketUserDto {
     private Long id;
     private ProductBasketDto product;
     private Double quantity;
+    private String size;
 
     public Double getTotalPrice() {
         return quantity * product.getResultPrice();

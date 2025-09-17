@@ -4,7 +4,7 @@ import com.final_project.shopper.shopper.dtos.adPaymentInfo.AdPaymentInfoDashboa
 import com.final_project.shopper.shopper.enums.TimeType;
 import com.final_project.shopper.shopper.models.AdPaymentInfo;
 import com.final_project.shopper.shopper.repositories.AdPaymentInfoRepository;
-import com.final_project.shopper.shopper.sevices.AdPaymentInfoService;
+import com.final_project.shopper.shopper.services.AdPaymentInfoService;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;

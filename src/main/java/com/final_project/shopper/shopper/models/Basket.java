@@ -25,5 +25,7 @@ public class Basket {
     @ManyToOne
     private User user;
 
+    private String size;
+
 
 }
