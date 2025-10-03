@@ -54,7 +54,7 @@ public class ProductController {
         if (result){
             return "redirect:/dashboard/products";
         }
-        return "dashboard/product/create.html";
+        return "dashboard/product/create";
     }
 
     @GetMapping("/dashboard/product/update/{id}")

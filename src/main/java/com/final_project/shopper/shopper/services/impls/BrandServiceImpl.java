@@ -153,4 +153,14 @@ public class BrandServiceImpl implements BrandService {
         return modelMapper.map(findBrand, BrandDeleteDto.class);
     }
 
+    @Override
+    public List<Brand> findAll() {
+        return brandRepository.findAll();
+    }
+
+    @Override
+    public Brand findById(Long id) {
+        return brandRepository.findById(id).orElseThrow();
+    }
+
 }

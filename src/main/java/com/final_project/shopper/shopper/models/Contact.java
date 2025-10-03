@@ -18,4 +18,7 @@ public class Contact {
     private String email;
     private String message;
     private boolean read;
+
+    @ManyToOne
+    private Brand brand;
 }

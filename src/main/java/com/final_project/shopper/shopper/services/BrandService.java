@@ -5,6 +5,9 @@ import com.final_project.shopper.shopper.dtos.brand.BrandDashboardDto;
 import com.final_project.shopper.shopper.dtos.brand.BrandDeleteDto;
 import com.final_project.shopper.shopper.dtos.brand.BrandUpdateDto;
 import com.final_project.shopper.shopper.dtos.contactInfo.ContactInfoDto;
+import com.final_project.shopper.shopper.models.Brand;
+
+import java.util.List;
 
 public interface BrandService {
     boolean create(BrandCreateDto brandCreateDto);
@@ -19,4 +22,8 @@ public interface BrandService {
     boolean deleteBrand();
 
     BrandDeleteDto getDeletedBrand();
+
+    List<Brand> findAll();
+
+    Brand findById(Long id);
 }

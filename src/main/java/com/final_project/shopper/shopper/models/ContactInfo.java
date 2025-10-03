@@ -14,6 +14,7 @@ public class ContactInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(length = 1000)
     private String addressMap;
     private String address;
     private String email;

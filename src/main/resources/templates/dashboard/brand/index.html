@@ -5,10 +5,35 @@
         layout:decorate="~{dashboard/layout}">
 <head>
     <meta charset="UTF-8">
-    <title>Brand</title>
+    <title>Brand & Contact</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .actions a {
+            margin-right: 8px;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .edit-btn { background: #2196F3; color: white; }
+        .delete-btn { background: #f44336; color: white; }
+    </style>
 </head>
 <body>
 <div layout:fragment="content">
+    <!-- Brand Section -->
     <div class="container mt-5">
         <h2 class="text-center mb-4">Your Brand</h2>
 
@@ -30,6 +55,28 @@
         </div>
     </div>
 
+    <!-- Contact Section -->
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Contact Information</h2>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Address</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Static example row -->
+            <tr>
+                <td th:text="${updatedContactInfos.address}">New York, 5th Avenue</td>
+                <td th:text="${updatedContactInfos.email}">example@mail.com</td>
+                <td th:text="${updatedContactInfos.phoneNumber}">+1 123 456 7890</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 </body>
 </html>

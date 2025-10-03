@@ -32,4 +32,11 @@ public class ContactInfoServiceImpl implements ContactInfoService {
         ContactInfoDto contactInfoDto = modelMapper.map(findContactInfo, ContactInfoDto.class);
         return contactInfoDto;
     }
+
+    @Override
+    public ContactInfoDto findContactInfoByBrandId(Long id) {
+        ContactInfo findContactInfo = contactInfoRepository.findByBrandId(id);
+        ContactInfoDto contactInfoDto = modelMapper.map(findContactInfo, ContactInfoDto.class);
+        return contactInfoDto;
+    }
 }

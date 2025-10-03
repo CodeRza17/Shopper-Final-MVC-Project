@@ -28,6 +28,8 @@ public class BrandController {
     public String brand(Model model){
         BrandDashboardDto brandDashboardDto = brandService.getBrand();
         model.addAttribute("brand", brandDashboardDto);
+        ContactInfoDto contactInfoDto = contactInfoService.getUpdatedContactInfos();
+        model.addAttribute("updatedContactInfos", contactInfoDto);
         return "dashboard/brand/index.html";
     }
 
