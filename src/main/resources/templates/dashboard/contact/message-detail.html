@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{dashboard/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Message Detail</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container-fluid px-4">
+        <!-- Page Header -->
+        <div class="d-flex justify-content-between align-items-center mt-4 mb-4">
+            <h1 class="h3 mb-0">Contact Message Detail</h1>
+            <a th:href="@{/dashboard/contact}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Back to Messages
+            </a>
+        </div>
+
+        <!-- Message Detail Card -->
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-envelope me-2"></i>Message Information
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Full Name -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-muted">
+                                <i class="fas fa-user me-2"></i>Full Name
+                            </label>
+                            <p class="form-control-plaintext border-bottom pb-2" th:text="${message.fullName}">
+                                John Doe
+                            </p>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-muted">
+                                <i class="fas fa-envelope me-2"></i>Email Address
+                            </label>
+                            <p class="form-control-plaintext border-bottom pb-2">
+                                <a th:href="@{'mailto:' + ${message.email}}"
+                                   th:text="${message.email}"
+                                   class="text-decoration-none">
+                                    john@example.com
+                                </a>
+                            </p>
+                        </div>
+
+                        <!-- Message -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-muted">
+                                <i class="fas fa-comment-dots me-2"></i>Message
+                            </label>
+                            <div class="border rounded p-3 bg-light">
+                                <p class="mb-0" th:text="${message.message}" style="white-space: pre-wrap;">
+                                    This is the message content...
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex gap-2 mt-4">
+                            <a th:href="@{'mailto:' + ${message.email}}" class="btn btn-success">
+                                <i class="fas fa-reply me-2"></i>Reply via Email
+                            </a>
+                            <button type="button" class="btn btn-outline-secondary" onclick="window.print()">
+                                <i class="fas fa-print me-2"></i>Print
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
