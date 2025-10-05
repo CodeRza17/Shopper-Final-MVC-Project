@@ -8,6 +8,7 @@ import com.final_project.shopper.shopper.repositories.UserRepository;
 import com.final_project.shopper.shopper.services.BasketService;
 import com.final_project.shopper.shopper.services.OrderProductService;
 import com.final_project.shopper.shopper.services.ProductService;
+import org.hibernate.engine.jdbc.Size;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class OrderProductServiceImpl implements OrderProductService {
     public boolean createOrderProduct(Order order) {
         User findUser = order.getUser();
         List<Basket> findBasket = findUser.getBaskets();
-
+        Double rewardPoint = 0.0;
         for (Basket basket : findBasket) {
             OrderProduct orderProduct = new OrderProduct();
             orderProduct.setQuantity(basket.getQuantity());
@@ -56,10 +57,13 @@ public class OrderProductServiceImpl implements OrderProductService {
 
             sizeObj.setQuantity(sizeObj.getQuantity() - basket.getQuantity());
 
+            rewardPoint+=product.getRewardPoints()*basket.getQuantity();
+
             productRepository.save(product);
             orderProductRepository.save(orderProduct);
         }
 
+        findUser.setRewardPoint(findUser.getRewardPoint()+rewardPoint);
         basketService.removeUserBasket(findUser.getId());
 
         return true;
