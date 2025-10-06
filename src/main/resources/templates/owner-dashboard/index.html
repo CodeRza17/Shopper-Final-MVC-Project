@@ -9,7 +9,32 @@
 </head>
 <body>
 <div layout:fragment="content">
+    <div style="display: flex; justify-content: center; align-items: center; min-height: 60vh; text-align: center; padding: 20px;">
+        <div style="display: flex; justify-content: center; align-items: center; min-height: 60vh; text-align: center; padding: 20px;">
+            <div>
+                <h1 style="font-size: 3.5rem; font-weight: 700; color: #2c3e50; margin-bottom: 15px; line-height: 1.2;">
+                    Welcome back,
+                    <span th:text="${admin.name}"
+                          style="background: linear-gradient(135deg, #e67e22, #f39c12); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                Admin
+            </span> 👋
+                </h1>
 
+                <!-- Tarix -->
+                <p style="font-size: 1.5rem; color: #7f8c8d; font-weight: 400; margin: 0;"
+                   th:text="${#dates.format(#dates.createNow(), 'dd MMMM yyyy')}">
+                    05 October 2025
+                </p>
+
+                <!-- Rol məlumatı (səliqəli formatda) -->
+                <p style="font-size: 1.2rem; color: #34495e; font-weight: 500; margin-top: 10px;"
+                   th:text="'Role: ' + ${#strings.capitalize(#strings.replace(#strings.replace(admin.role.name, 'ROLE_', ''), '_', ' '))}">
+                    Role: Admin
+                </p>
+            </div>
+        </div>
+
+    </div>
 
 </div>
 </body>
