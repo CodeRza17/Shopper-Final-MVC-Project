@@ -1,5 +1,6 @@
 package com.final_project.shopper.shopper.controller.dashboard;
 
+import com.final_project.shopper.shopper.models.Brand;
 import com.final_project.shopper.shopper.models.User;
 import com.final_project.shopper.shopper.repositories.UserRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,6 +24,8 @@ public class DashboardController {
     public String index(Principal principal, Model model){
         User user = userRepository.findByEmail(principal.getName());
         model.addAttribute("admin", user);
+        Brand brand = user.getBrand();
+        model.addAttribute("brand", brand);
         return "/dashboard/index.html";
     }
 }

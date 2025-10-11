@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -68,11 +69,20 @@ public class ProductCategoryController {
 
     @PostMapping("/dashboard/product-category/delete/{id}")
     @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_MANAGER')")
-    public String delete(@PathVariable Long id){
+    public String delete(@PathVariable Long id,  RedirectAttributes redirectAttributes){
         boolean result = productCategoryService.deleteCategory(id);
         if (result){
             return "redirect:/dashboard/product-categories";
+        }else {
+            redirectAttributes.addFlashAttribute("errorMessage",
+                    "This category is used in products, so it cannot be deleted.");
+            return "redirect:/dashboard/product-category/delete-error";
         }
-        return "dashboard/product-category/delete.html";
     }
+
+    @GetMapping("/dashboard/product-category/delete-error")
+    public String deleteErrorPage() {
+        return "dashboard/product-category/delete-error.html";
+    }
+
 }

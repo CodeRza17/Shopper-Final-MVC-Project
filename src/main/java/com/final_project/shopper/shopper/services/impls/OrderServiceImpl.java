@@ -42,7 +42,7 @@ public class OrderServiceImpl implements OrderService {
         order.setUser(user);
         order.setComment(orderUserDto.getComment());
         orderRepository.save(order);
-        boolean result = orderProductService.createOrderProduct(order);
+        orderProductService.createOrderProduct(order);
         return order;
     }
 

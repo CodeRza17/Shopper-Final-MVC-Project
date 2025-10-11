@@ -5,103 +5,248 @@
 <head>
     <meta charset="UTF-8">
     <title>Best Seller</title>
-    <!-- HEAD hissəsində əlavə et -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        .sales-count {
-    color: #ff5722;
-    font-size: 15px;
-    margin-top: 6px;
-    font-weight: bold;
-    animation: pulse 2s infinite;
-}
+        * {
+            box-sizing: border-box;
+        }
 
-@keyframes pulse {
-    0% { opacity: 1; }
-    50% { opacity: 0.6; }
-    100% { opacity: 1; }
-}
+        /* --- PAGE HEADER --- */
+        .header_text {
+            text-align: center;
+            margin: 50px 0 40px 0;
+        }
 
+        .header_text h4 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            position: relative;
+            display: inline-block;
+        }
+
+        .header_text h4::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #e67e22, #f39c12);
+            border-radius: 2px;
+        }
+
+        /* --- PRODUCT GRID --- */
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); /* 4 məhsul sətirdə */
-            gap: 20px;
-            padding: 0;
-            margin: 0 auto;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            padding: 0 20px;
+            margin-bottom: 60px;
         }
+
         .product-box {
-            border: 1px solid #eee;
-            border-radius: 10px;
-            padding: 10px;
-            text-align: center;
-            transition: box-shadow 0.3s ease;
-            height: 100%;
             background: #fff;
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            border: 1px solid #f0f0f0;
+            position: relative;
+            overflow: hidden;
         }
+
         .product-box:hover {
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+            border-color: #e67e22;
         }
+
+        /* --- DISCOUNT BADGE --- */
+        .discount-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14px;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* --- PRODUCT IMAGE --- */
+        .product-image-wrapper {
+            position: relative;
+            margin-bottom: 15px;
+            height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fafafa;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
         .product-box img {
             max-height: 200px;
+            max-width: 100%;
             object-fit: contain;
-            width: 100%;
-            border-radius: 8px;
+            transition: transform 0.3s ease;
         }
+
+        .product-box:hover img {
+            transform: scale(1.08);
+        }
+
+        /* --- PRODUCT TITLE --- */
         .product-box .title {
             display: block;
-            font-weight: bold;
-            margin-top: 10px;
+            font-weight: 600;
             font-size: 16px;
-            color: #333;
+            color: #2c3e50;
             text-decoration: none;
+            margin-bottom: 10px;
+            line-height: 1.4;
+            min-height: 44px;
         }
+
         .product-box .title:hover {
-            color: #007bff;
+            color: #e67e22;
         }
-        .product-box .price {
-            color: #000;
+
+        /* --- SALES COUNT --- */
+        .sales-count {
+            background: linear-gradient(135deg, #ff6b6b, #ff5722);
+            color: white;
+            font-size: 13px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 12px;
+            animation: subtlePulse 2s infinite;
+        }
+
+        @keyframes subtlePulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.85; }
+        }
+
+        .sales-count i {
             font-size: 14px;
-            margin-top: 5px;
+            animation: fire 1.5s infinite;
+        }
+
+        @keyframes fire {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* --- PRODUCT PRICE --- */
+        .price-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: #95a5a6;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .discount-price {
+            color: #e74c3c;
+            font-size: 20px;
+        }
+
+        .regular-price {
+            color: #2c3e50;
+            font-size: 20px;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 1200px) {
+            .product-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
 
         @media (max-width: 992px) {
             .product-grid {
-                grid-template-columns: repeat(2, 1fr); /* Mobil cihazlarda 2 sütun */
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
             }
         }
 
         @media (max-width: 576px) {
             .product-grid {
-                grid-template-columns: repeat(1, 1fr); /* Kiçik ekranlarda 1 sütun */
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .header_text h4 {
+                font-size: 1.8rem;
             }
         }
     </style>
 </head>
 <body>
 <div layout:fragment="content">
+    <!-- PAGE HEADER -->
     <section class="header_text sub">
-        <h4><span>Best products</span></h4>
+        <h4><span>Best Sellers</span></h4>
     </section>
 
+    <!-- PRODUCT GRID -->
     <section class="main-content">
         <div class="product-grid">
             <div th:each="product : ${bsProduct}" class="product-box">
-                <a href="#" th:href="@{'/product/product-detail/' + ${product.id}}">
+                <!-- DISCOUNT BADGE -->
+                <div th:if="${product.discountPrice > 0}" class="discount-badge">
+                    -<span th:text="${#numbers.formatDecimal(product.discountPrice * 100, 0, 0)}">12</span>%
+                </div>
+
+                <!-- PRODUCT IMAGE -->
+                <a th:href="@{'/product/product-detail/' + ${product.id}}" class="product-image-wrapper">
                     <img th:src="${product.photoUrl}" alt="Product Image">
                 </a>
-                <a th:text="${product.name}" th:href="@{'/product/product-detail/' + ${product.id}}" class="title"></a>
-                <p class="sales-count">
-                    <i class="fa fa-fire"></i> <span th:text="${product.salesCount}">0</span> Sold
-                </p>
 
+                <!-- PRODUCT TITLE -->
+                <a th:text="${product.name}"
+                   th:href="@{'/product/product-detail/' + ${product.id}}"
+                   class="title">Product Name</a>
 
-                <span th:if="${product.discountPrice > 0}"
-                      style="text-decoration: line-through; color: gray; margin-right: 8px;"
-                      th:text="${'$' + #numbers.formatDecimal(product.price, 1, 2)}"></span>
+                <!-- SALES COUNT -->
+                <div class="sales-count">
+                    <i class="fa fa-fire"></i>
+                    <span th:text="${product.salesCount}">0</span> Sold
+                </div>
 
-                <span th:style="${product.discountPrice > 0} ? 'color: red; font-weight: bold;' : 'font-weight: bold;'"
-                      th:text="${'$' + #numbers.formatDecimal(product.discountPrice > 0 ? product.price * (1 - product.discountPrice) : product.price, 1, 2)}"></span>
+                <!-- PRODUCT PRICE -->
+                <div class="price-container">
+                    <span th:if="${product.discountPrice > 0}"
+                          class="original-price"
+                          th:text="${'$' + #numbers.formatDecimal(product.price, 1, 2)}">$99.99</span>
+
+                    <span th:class="${product.discountPrice > 0} ? 'discount-price' : 'regular-price'"
+                          th:text="${'$' + #numbers.formatDecimal(product.discountPrice > 0 ? product.price * (1 - product.discountPrice) : product.price, 1, 2)}">$87.99</span>
+                </div>
             </div>
         </div>
     </section>

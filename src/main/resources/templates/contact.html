@@ -2,182 +2,77 @@
 <html
 		xmlns:th="http://www.thymeleaf.org"
 		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-		layout:decorate="~{dashboard/layout}">
+		layout:decorate="~{layout}">
 <head>
 	<meta charset="UTF-8">
-	<title>Contact Messages</title>
-	<style>
-		.contact-container {
-            padding: 20px;
-            background: #f8f9fa;
-            min-height: 100vh;
-        }
-
-        .page-header {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-            border-left: 4px solid #e67e22;
-        }
-
-        .page-title {
-            margin: 0;
-            color: #2c3e50;
-            font-size: 24px;
-            font-weight: 600;
-        }
-
-        .messages-grid {
-            display: grid;
-            gap: 15px;
-        }
-
-        .message-card {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border-left: 4px solid transparent;
-            text-decoration: none; /* kart link kimi görünməsini təmin edir */
-            color: inherit;
-            display: block;
-        }
-
-        .message-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-            border-left-color: #e67e22;
-        }
-
-        .message-card.unread {
-            background: #fff8f0;
-            border-left-color: #e67e22;
-        }
-
-        .message-card.read {
-            background: #f8f9fa;
-            border-left-color: #95a5a6;
-        }
-
-        .message-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .sender-info {
-            flex-grow: 1;
-        }
-
-        .sender-name {
-            font-weight: 600;
-            color: #2c3e50;
-            font-size: 16px;
-            margin-bottom: 4px;
-        }
-
-        .sender-email {
-            color: #7f8c8d;
-            font-size: 14px;
-        }
-
-        .message-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .status-badge {
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-
-        .status-unread {
-            background: #fff2e6;
-            color: #e67e22;
-            border: 1px solid #f39c12;
-        }
-
-        .status-read {
-            background: #ecf0f1;
-            color: #7f8c8d;
-            border: 1px solid #bdc3c7;
-        }
-
-        .message-preview {
-            color: #34495e;
-            line-height: 1.5;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .no-messages {
-            text-align: center;
-            padding: 60px 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .no-messages-icon {
-            font-size: 48px;
-            color: #bdc3c7;
-            margin-bottom: 20px;
-        }
-
-        .no-messages-text {
-            color: #7f8c8d;
-            font-size: 16px;
-        }
-	</style>
+	<title>Contact Brand</title>
 </head>
 <body>
 <div layout:fragment="content">
-	<div class="contact-container">
-		<div class="page-header">
-			<h1 class="page-title">Contact Messages</h1>
-		</div>
+	<section class="google_map">
+		<iframe th:src="${contactInfo.addressMap}"
+				width="100%" height="300" frameborder="0"
+				scrolling="no" marginheight="0" marginwidth="0"
+				allowfullscreen></iframe>
+	</section>
 
-		<div th:if="${messages != null and !messages.empty}">
-			<div class="messages-grid">
-				<a th:each="message : ${messages}"
-				   th:href="@{/dashboard/contact/messageDetail/{id}(id=${message.id})}"
-				   class="message-card"
-				   th:classappend="${message.read} ? 'read' : 'unread'">
+	<section class="header_text sub">
+		<h4><span>Contact Brand</span></h4>
+	</section>
 
-					<div class="message-header">
-						<div class="sender-info">
-							<div class="sender-name" th:text="${message.fullName}">John Doe</div>
-							<div class="sender-email" th:text="${message.email}">john@example.com</div>
+	<section class="main-content">
+		<div class="row">
+			<!-- Contact Info -->
+			<div class="span5">
+				<div>
+					<h5>Brand Contact Information</h5>
+					<p>
+						<strong>Address:</strong> <span th:text="${contactInfo.address}">Brand Address</span><br>
+						<strong>Phone:</strong> <span th:text="${contactInfo.phoneNumber}">(000) 000-0000</span><br>
+						<strong>Email:</strong> <a th:href="'mailto:' + ${contactInfo.email}"
+												   th:text="${contactInfo.email}">brand@example.com</a>
+					</p>
+				</div>
+			</div>
+
+			<!-- Send Message Form -->
+			<div class="span7">
+				<p>You can contact the brand directly by sending a message below:</p>
+
+				<form th:action="@{/contact/sendMessage}" method="post" th:object="${contactInfo}">
+					<input type="hidden" name="brandId" th:value="${brandId}"/>
+
+					<fieldset>
+						<div class="clearfix">
+							<label><span>Name:</span></label>
+							<div class="input">
+								<input type="text" th:value="${user.name}" readonly class="input-xlarge">
+							</div>
 						</div>
-						<div class="message-status">
-                            <span class="status-badge"
-								  th:classappend="${message.read} ? 'status-read' : 'status-unread'"
-								  th:text="${message.read} ? 'Read' : 'New'">New</span>
-						</div>
-					</div>
 
-					<div class="message-preview" th:text="${message.message}">
-						This is a preview of the message content that will be truncated if it's too long...
-					</div>
-				</a>
+						<div class="clearfix">
+							<label><span>Email:</span></label>
+							<div class="input">
+								<input type="text" th:value="${user.email}" readonly class="input-xlarge">
+							</div>
+						</div>
+
+						<div class="clearfix">
+							<label for="message"><span>Message:</span></label>
+							<div class="input">
+                                <textarea id="message" name="message" rows="7" class="input-xlarge"
+										  placeholder="Write your message..." required></textarea>
+							</div>
+						</div>
+
+						<div class="actions">
+							<button type="submit" class="btn btn-inverse">Send Message</button>
+						</div>
+					</fieldset>
+				</form>
 			</div>
 		</div>
-
-		<div th:if="${messages == null or messages.empty}" class="no-messages">
-			<div class="no-messages-icon">📧</div>
-			<div class="no-messages-text">No contact messages yet.</div>
-		</div>
-	</div>
+	</section>
 </div>
 </body>
 </html>

@@ -10,6 +10,7 @@ import com.final_project.shopper.shopper.repositories.ProductRepository;
 import com.final_project.shopper.shopper.repositories.UserRepository;
 import com.final_project.shopper.shopper.services.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.util.List;
@@ -100,10 +102,10 @@ public class ProductController {
         boolean allMatch = users.stream()
                 .allMatch(u -> u.getBrand().getId().equals(currentUser.getBrand().getId()));
 
-        if (!allMatch) {
-            throw new AccessDeniedException("You are not authorized to edit these users");
-        }
         ProductUpdateDto productUpdateDto = productService.getDeletedProducts(id);
+        if (productUpdateDto == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
+        }
         model.addAttribute("product", productUpdateDto);
         return "dashboard/product/delete.html";
     }

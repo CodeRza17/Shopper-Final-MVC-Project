@@ -6,6 +6,8 @@ import com.final_project.shopper.shopper.dtos.brand.BrandUpdateDto;
 import com.final_project.shopper.shopper.dtos.contactInfo.ContactInfoDto;
 import com.final_project.shopper.shopper.services.BrandService;
 import com.final_project.shopper.shopper.services.ContactInfoService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -13,6 +15,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 
 @Controller
 public class BrandController {
@@ -66,11 +71,17 @@ public class BrandController {
 
     @PostMapping("/dashboard/brand/delete")
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
-    public String delete(){
+    public String delete(HttpServletRequest request, HttpServletResponse response) {
         boolean result = brandService.deleteBrand();
-        if (result){
-            return "redirect:/logout";
+
+        if (result) {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth != null) {
+                new SecurityContextLogoutHandler().logout(request, response, auth);
+            }
+            return "redirect:/login";
         }
+
         return "dashboard/brand/delete.html";
     }
 }

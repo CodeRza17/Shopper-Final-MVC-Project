@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface OrderService {
     Order orderProduct(String userEmail, OrderUserDto orderUserDto);
-    public List<Order> getOrdersByUser(String email);
+    List<Order> getOrdersByUser(String email);
 
 }

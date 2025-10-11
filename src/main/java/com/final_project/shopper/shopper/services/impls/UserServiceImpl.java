@@ -41,11 +41,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean register(UserRegisterDto userRegisterDto) {
+    public String register(UserRegisterDto userRegisterDto) {
 
         User findUser = userRepository.findByEmail(userRegisterDto.getEmail());
         if (findUser != null) {
-            return false;
+            return "Email";
         }
 
 
@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
             if ("ROLE_SUPER_ADMIN".equalsIgnoreCase(userRegisterDto.getRoleName())) {
                 if (userRegisterDto.getBrandOwnerCode() == null ||
                         !brand.getBradOwnerCode().equals(userRegisterDto.getBrandOwnerCode())) {
-                    throw new RuntimeException("Invalid brand owner code");
+                    return "BrandOwnerCode";
                 }
             }
 
@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService {
 
         otpService.sendOtpEmail(user.getEmail(), otp);
 
-        return true;
+        return "true";
     }
 
 

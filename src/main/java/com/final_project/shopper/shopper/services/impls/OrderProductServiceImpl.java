@@ -1,10 +1,7 @@
 package com.final_project.shopper.shopper.services.impls;
 
 import com.final_project.shopper.shopper.models.*;
-import com.final_project.shopper.shopper.repositories.BasketRepository;
-import com.final_project.shopper.shopper.repositories.OrderProductRepository;
-import com.final_project.shopper.shopper.repositories.ProductRepository;
-import com.final_project.shopper.shopper.repositories.UserRepository;
+import com.final_project.shopper.shopper.repositories.*;
 import com.final_project.shopper.shopper.services.BasketService;
 import com.final_project.shopper.shopper.services.OrderProductService;
 import com.final_project.shopper.shopper.services.ProductService;
@@ -20,12 +17,14 @@ public class OrderProductServiceImpl implements OrderProductService {
     private final BasketService basketService;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
+    private final BrandRepository brandRepository;
 
-    public OrderProductServiceImpl(ProductService productService, OrderProductRepository orderProductRepository, BasketService basketService, BasketRepository basketRepository, BasketService basketService1, ProductRepository productRepository, UserRepository userRepository) {
+    public OrderProductServiceImpl(OrderProductRepository orderProductRepository,BasketService basketService1, ProductRepository productRepository, UserRepository userRepository, BrandRepository brandRepository) {
         this.orderProductRepository = orderProductRepository;
         this.basketService = basketService1;
         this.productRepository = productRepository;
         this.userRepository = userRepository;
+        this.brandRepository = brandRepository;
     }
 
     @Override
@@ -48,7 +47,8 @@ public class OrderProductServiceImpl implements OrderProductService {
             product.setCountStock(product.getCountStock() - basket.getQuantity());
 
             product.setSalesCount(product.getSalesCount() + basket.getQuantity());
-
+            Brand brand = product.getBrand();
+            brand.setSalesCount(brand.getSalesCount()+ basket.getQuantity());
 
             Sizes sizeObj = product.getSizeQuantities().stream()
                     .filter(s -> s.getSize().equalsIgnoreCase(basket.getSize()))

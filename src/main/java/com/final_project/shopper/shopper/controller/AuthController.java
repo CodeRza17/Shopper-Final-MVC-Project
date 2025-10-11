@@ -23,15 +23,10 @@ public class AuthController {
     private final UserService userService;
     private final BrandService brandService;
     private final BrandRepository brandRepository;
-    private final UserRepository userRepository;
-    private final OtpService otpService;
-
     public AuthController(UserService userService, BrandService brandService, BrandRepository brandRepository, UserRepository userRepositoryjn, OtpService otpService) {
         this.userService = userService;
         this.brandService = brandService;
         this.brandRepository = brandRepository;
-        this.userRepository = userRepositoryjn;
-        this.otpService = otpService;
     }
 
     @GetMapping("/login")
@@ -53,11 +48,14 @@ public class AuthController {
         List<Brand> brands = brandRepository.findAll();
         model.addAttribute("brands", brands);
 
-        boolean result = userService.register(userRegisterDto);
-        if (result){
+        String result = userService.register(userRegisterDto);
+        if (result.equals("true")){
             model.addAttribute("email", userRegisterDto.getEmail());
             return "auth/verify-otp";
-        }else{
+        } else if (result.equals("BrandOwnerCode")) {
+            model.addAttribute("errorMessage", "Brand Owner Code wrong");
+            return "auth/register.html";
+        } else{
             model.addAttribute("errorMessage", "This email is already in use");
             return "auth/register.html";
         }

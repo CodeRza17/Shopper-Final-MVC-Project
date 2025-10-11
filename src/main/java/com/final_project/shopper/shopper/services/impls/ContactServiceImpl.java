@@ -49,8 +49,13 @@ public class ContactServiceImpl implements ContactService {
         List<Contact> findContacts = contactRepository.findAllByBrandId(id);
         List<ContactDashboardDto> contactDashboardDtoList = findContacts.stream().map(contact -> modelMapper.map(contact, ContactDashboardDto.class)).toList();
         for (ContactDashboardDto contactDashboardDto:contactDashboardDtoList){
-            String message = contactDashboardDto.getMessage().substring(0,10);
+            String message = contactDashboardDto.getMessage();
+            if (contactDashboardDto.getMessage().length()>11){
+            message = message.substring(0,10);
             message+="....";
+            }else {
+                message+="....";
+            }
             contactDashboardDto.setMessage(message);
         }
 

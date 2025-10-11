@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface UserService {
 
-    boolean register(UserRegisterDto userRegisterDto);
+    String register(UserRegisterDto userRegisterDto);
 
     User findUserByEmail(String username);
 

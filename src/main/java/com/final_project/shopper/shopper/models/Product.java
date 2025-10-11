@@ -44,4 +44,7 @@ public class Product {
     @ManyToOne
     private ProductCategory productCategory;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<OrderProduct> orderProducts;
+
 }

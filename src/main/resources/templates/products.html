@@ -5,52 +5,455 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Products</title>
+	<style>
+		* {
+			box-sizing: border-box;
+		}
+
+		/* --- PAGE HEADER --- */
+		.header_text {
+			text-align: center;
+			margin: 40px 0 40px 0;
+		}
+
+		.header_text h4 {
+			font-size: 2.5rem;
+			font-weight: 700;
+			color: #1a1a1a;
+			position: relative;
+			display: inline-block;
+		}
+
+		.header_text h4::after {
+			content: '';
+			position: absolute;
+			bottom: -10px;
+			left: 50%;
+			transform: translateX(-50%);
+			width: 60px;
+			height: 4px;
+			background: linear-gradient(90deg, #e67e22, #f39c12);
+			border-radius: 2px;
+		}
+
+		/* --- MAIN LAYOUT --- */
+		.main-content {
+			padding: 0 20px;
+		}
+
+		.main-content .row {
+			display: flex;
+			gap: 30px;
+			align-items: flex-start;
+		}
+
+		.span9 {
+			flex: 1;
+			min-width: 0;
+		}
+
+		.span3 {
+			width: 300px;
+			flex-shrink: 0;
+		}
+
+		/* --- PRODUCT GRID --- */
+		.product-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+			gap: 25px;
+			padding: 0;
+			list-style: none;
+			margin-bottom: 40px;
+		}
+
+		.product-item {
+			position: relative;
+			background: #fff;
+			padding: 20px;
+			border-radius: 16px;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+			text-align: center;
+			transition: all 0.3s ease;
+			border: 1px solid #f0f0f0;
+		}
+
+		.product-item:hover {
+			transform: translateY(-8px);
+			box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+			border-color: #e67e22;
+		}
+
+		/* --- DISCOUNT BADGE --- */
+		.discount-badge {
+			position: absolute;
+			top: 15px;
+			right: 15px;
+			background: linear-gradient(135deg, #e74c3c, #c0392b);
+			color: white;
+			padding: 8px 14px;
+			border-radius: 8px;
+			font-weight: 700;
+			font-size: 14px;
+			z-index: 10;
+			box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+			animation: pulse 2s infinite;
+		}
+
+		@keyframes pulse {
+			0%, 100% { transform: scale(1); }
+			50% { transform: scale(1.05); }
+		}
+
+		/* --- PRODUCT IMAGE --- */
+		.product-item img {
+			width: 100%;
+			height: 220px;
+			object-fit: cover;
+			border-radius: 12px;
+			margin-bottom: 15px;
+			background: #fafafa;
+			transition: transform 0.3s ease;
+		}
+
+		.product-item:hover img {
+			transform: scale(1.08);
+		}
+
+		/* --- PRODUCT INFO --- */
+		.product-item .title {
+			display: block;
+			margin-top: 10px;
+			font-weight: 600;
+			font-size: 16px;
+			text-decoration: none;
+			color: #2c3e50;
+			line-height: 1.4;
+			min-height: 44px;
+			transition: color 0.3s ease;
+		}
+
+		.product-item .title:hover {
+			color: #e67e22;
+		}
+
+		.product-item .price {
+			margin-top: 10px;
+			font-size: 18px;
+			font-weight: 700;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 10px;
+		}
+
+		.original-price {
+			text-decoration: line-through;
+			color: #95a5a6;
+			font-size: 15px;
+			font-weight: 500;
+		}
+
+		.discount-price {
+			color: #e74c3c;
+			font-size: 20px;
+		}
+
+		/* --- PAGINATION --- */
+		.pagination {
+			margin: 40px 0;
+			text-align: center;
+		}
+
+		.pagination ul {
+			display: inline-flex;
+			gap: 8px;
+			list-style: none;
+			padding: 0;
+			margin: 0;
+		}
+
+		.pagination li {
+			margin: 0;
+		}
+
+		.pagination li a {
+			display: block;
+			padding: 10px 16px;
+			background: white;
+			border: 1px solid #e0e0e0;
+			border-radius: 8px;
+			color: #2c3e50;
+			text-decoration: none;
+			font-weight: 600;
+			transition: all 0.3s ease;
+		}
+
+		.pagination li a:hover {
+			background: #e67e22;
+			color: white;
+			border-color: #e67e22;
+		}
+
+		.pagination li.active a {
+			background: linear-gradient(135deg, #e67e22, #f39c12);
+			color: white;
+			border-color: transparent;
+		}
+
+		.pagination li.disabled a {
+			opacity: 0.4;
+			cursor: not-allowed;
+			pointer-events: none;
+		}
+
+		/* --- SIDEBAR BLOCKS --- */
+		.span3 .block {
+			background: white;
+			border-radius: 16px;
+			padding: 25px;
+			margin-bottom: 25px;
+			box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+			border: 1px solid #f0f0f0;
+		}
+
+		.span3 .block .nav-header {
+			font-size: 16px;
+			font-weight: 700;
+			color: #2c3e50;
+			margin-bottom: 15px;
+			padding-bottom: 12px;
+			border-bottom: 2px solid #e67e22;
+		}
+
+		.span3 .block .nav-list {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+		}
+
+		.span3 .block .nav-list li {
+			margin-bottom: 12px;
+		}
+
+		.span3 .block .nav-list li label {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			cursor: pointer;
+			padding: 8px;
+			border-radius: 8px;
+			transition: all 0.3s ease;
+			font-size: 14px;
+			color: #2c3e50;
+		}
+
+		.span3 .block .nav-list li label:hover {
+			background: #f8f9fa;
+		}
+
+		.span3 .block .nav-list li input[type="checkbox"] {
+			width: 18px;
+			height: 18px;
+			cursor: pointer;
+			accent-color: #e67e22;
+		}
+
+		/* --- SIDEBAR TITLE --- */
+		.span3 .block .title {
+			font-size: 18px;
+			font-weight: 700;
+			color: #2c3e50;
+			margin-bottom: 20px;
+			padding-bottom: 12px;
+			border-bottom: 2px solid #e67e22;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.span3 .block .title .text {
+			color: #e67e22;
+		}
+
+		/* --- CAROUSEL --- */
+		.carousel {
+			margin-top: 15px;
+		}
+
+		.carousel .product-box {
+			text-align: center;
+			padding: 15px;
+			background: #fafafa;
+			border-radius: 12px;
+		}
+
+		.carousel .product-box img {
+			width: 100%;
+			height: 180px;
+			object-fit: cover;
+			border-radius: 8px;
+			margin-bottom: 12px;
+		}
+
+		.carousel .product-box .title {
+			display: block;
+			font-weight: 600;
+			font-size: 14px;
+			color: #2c3e50;
+			text-decoration: none;
+			margin-bottom: 8px;
+		}
+
+		.carousel .product-box .title:hover {
+			color: #e67e22;
+		}
+
+		.carousel .product-box .category {
+			display: block;
+			font-size: 12px;
+			color: #7f8c8d;
+			text-decoration: none;
+			margin-bottom: 8px;
+		}
+
+		.carousel .product-box .price {
+			font-weight: 700;
+			color: #e67e22;
+			font-size: 16px;
+		}
+
+		/* --- BEST SELLER LIST --- */
+		.small-product {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+		}
+
+		.small-product li {
+			display: flex;
+			gap: 15px;
+			padding: 15px;
+			margin-bottom: 12px;
+			background: #fafafa;
+			border-radius: 12px;
+			transition: all 0.3s ease;
+		}
+
+		.small-product li:hover {
+			background: #f0f0f0;
+			transform: translateX(5px);
+		}
+
+		.small-product li img {
+			width: 70px;
+			height: 70px;
+			object-fit: cover;
+			border-radius: 8px;
+		}
+
+		.small-product li a {
+			flex: 1;
+			display: flex;
+			align-items: center;
+			text-decoration: none;
+			color: #2c3e50;
+			font-weight: 600;
+			font-size: 14px;
+			line-height: 1.4;
+		}
+
+		.small-product li a:hover {
+			color: #e67e22;
+		}
+
+		/* --- RESPONSIVE --- */
+		@media (max-width: 992px) {
+			.main-content .row {
+				flex-direction: column;
+			}
+
+			.span3 {
+				width: 100%;
+			}
+
+			.product-grid {
+				grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+			}
+		}
+
+		@media (max-width: 768px) {
+			.product-grid {
+				grid-template-columns: repeat(2, 1fr);
+				gap: 15px;
+			}
+
+			.header_text h4 {
+				font-size: 1.8rem;
+			}
+
+			.product-item {
+				padding: 15px;
+			}
+
+			.product-item img {
+				height: 180px;
+			}
+		}
+
+		@media (max-width: 576px) {
+			.product-grid {
+				grid-template-columns: 1fr;
+			}
+		}
+	</style>
 </head>
 <body>
 <div layout:fragment="content">
+	<!-- PAGE HEADER -->
 	<section class="header_text sub">
-		<h4><span>New products</span></h4>
+		<h4><span>New Products</span></h4>
 	</section>
 
+	<!-- MAIN CONTENT -->
 	<section class="main-content">
 		<div class="row">
+			<!-- PRODUCTS SECTION -->
 			<div class="span9">
-				<ul class="product-grid" style="
-                    display: grid;
-                    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-                    gap: 20px;
-                    padding: 0;
-                    list-style: none;">
-					<li th:each="product : ${products.models}" class="product-item" style="position: relative; background: #fff; padding: 10px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05); text-align: center;">
-                        <span th:if="${product.discountPrice > 0}"
-							  style="position: absolute; top: 10px; right: 10px; background-color: red; color: white; padding: 5px 8px; border-radius: 4px; font-weight: bold; font-size: 14px;"
-							  th:text="'-' + ${#numbers.formatDecimal(product.discountPrice * 100, 0, 0)} + '%'"></span>
+				<ul class="product-grid">
+					<li th:each="product : ${products.models}" class="product-item">
+						<!-- DISCOUNT BADGE -->
+						<span th:if="${product.discountPrice > 0}" class="discount-badge">
+							-<span th:text="${#numbers.formatDecimal(product.discountPrice * 100, 0, 0)}">12</span>%
+						</span>
 
+						<!-- PRODUCT IMAGE -->
 						<a th:href="@{'/product/product-detail/' + ${product.id}}">
-							<img th:src="${product.photoUrl}" alt="Product Image" style="width: 100%; height: auto; border-radius: 5px;">
+							<img th:src="${product.photoUrl}" alt="Product Image">
 						</a>
 
-						<a th:href="@{'/product/product-detail/' + ${product.id}}" class="title" th:text="${product.name}"
-						   style="display: block; margin-top: 10px; font-weight: bold; text-decoration: none; color: black;"></a>
+						<!-- PRODUCT TITLE -->
+						<a th:href="@{'/product/product-detail/' + ${product.id}}" class="title" th:text="${product.name}">Product Name</a>
 
-						<p class="price" style="margin-top: 5px;">
-                            <span th:if="${product.discountPrice > 0}"
-								  style="text-decoration: line-through; color: gray; margin-right: 8px;"
-								  th:text="${'$' + #numbers.formatDecimal(product.price, 1, 2)}"></span>
+						<!-- PRODUCT PRICE -->
+						<p class="price">
+							<span th:if="${product.discountPrice > 0}"
+								  class="original-price"
+								  th:text="${'$' + #numbers.formatDecimal(product.price, 1, 2)}">$99.99</span>
 
-							<span th:style="${product.discountPrice > 0} ? 'color: red; font-weight: bold;' : 'font-weight: bold;'"
-								  th:text="${'$' + #numbers.formatDecimal(product.discountPrice > 0 ? product.price * (1 - product.discountPrice) : product.price, 1, 2)}"></span>
+							<span th:class="${product.discountPrice > 0} ? 'discount-price' : ''"
+								  th:text="${'$' + #numbers.formatDecimal(product.discountPrice > 0 ? product.price * (1 - product.discountPrice) : product.price, 1, 2)}">$87.99</span>
 						</p>
 					</li>
 				</ul>
 
-				<hr>
+				<!-- PAGINATION -->
 				<div class="pagination pagination-small pagination-centered" th:if="${products.totalPage > 1}">
 					<ul>
 						<li th:classappend="${products.currentPage == 1} ? 'disabled'">
 							<a th:href="@{'/products/' + ${audience} + '?currentPage=' + ${products.currentPage - 1}}"
-							   th:if="${products.currentPage > 1}">Prev</a>
-							<a th:if="${products.currentPage == 1}">Prev</a>
+							   th:if="${products.currentPage > 1}">← Prev</a>
+							<a th:if="${products.currentPage == 1}">← Prev</a>
 						</li>
 
 						<li th:each="pageNum : ${#numbers.sequence(1, products.totalPage)}"
@@ -61,14 +464,16 @@
 
 						<li th:classappend="${products.currentPage == products.totalPage} ? 'disabled'">
 							<a th:href="@{'/products/' + ${audience} + '?currentPage=' + ${products.currentPage + 1}}"
-							   th:if="${products.currentPage < products.totalPage}">Next</a>
-							<a th:if="${products.currentPage == products.totalPage}">Next</a>
+							   th:if="${products.currentPage < products.totalPage}">Next →</a>
+							<a th:if="${products.currentPage == products.totalPage}">Next →</a>
 						</li>
 					</ul>
 				</div>
 			</div>
 
+			<!-- SIDEBAR -->
 			<div class="span3 col">
+				<!-- FILTERS -->
 				<div class="block">
 					<form method="get" th:action="@{'/products/' + ${audience}}">
 						<ul class="nav nav-list">
@@ -78,70 +483,63 @@
 									<input type="checkbox" name="categoryIds" th:value="${category.id}"
 										   th:checked="${#lists.contains(selectedCategoryIds, category.id)}"
 										   onchange="this.form.submit()">
-									<span th:text="${category.name}"></span>
+									<span th:text="${category.name}">Category</span>
 								</label>
 							</li>
 						</ul>
 
-						<br/>
-
-						<ul class="nav nav-list below">
+						<ul class="nav nav-list below" style="margin-top: 20px;">
 							<li class="nav-header">BRANDS</li>
 							<li th:each="brand : ${brands}">
 								<label>
 									<input type="checkbox" name="brandIds" th:value="${brand.id}"
 										   th:checked="${#lists.contains(selectedBrandIds, brand.id)}"
 										   onchange="this.form.submit()">
-									<span th:text="${brand.name}"></span>
+									<span th:text="${brand.name}">Brand</span>
 								</label>
 							</li>
 						</ul>
 
-						<!-- səhifələmə sıfırlamaq üçün -->
 						<input type="hidden" name="currentPage" value="1" />
 					</form>
 				</div>
 
+				<!-- RANDOM PRODUCTS -->
 				<div class="block">
 					<h4 class="title">
-						<span class="pull-left"><span class="text">Randomize</span></span>
+						<span class="text">Randomize</span>
 						<span class="pull-right">
-            <a class="left button" href="#myCarousel" data-slide="prev"></a>
-            <a class="right button" href="#myCarousel" data-slide="next"></a>
-        </span>
+							<a class="left button" href="#myCarousel" data-slide="prev">‹</a>
+							<a class="right button" href="#myCarousel" data-slide="next">›</a>
+						</span>
 					</h4>
 					<div id="myCarousel" class="carousel slide">
 						<div class="carousel-inner">
 							<div th:each="rdProduct, iterStat : ${randomProducts}"
 								 th:class="${iterStat.first} ? 'item active' : 'item'">
-								<ul class="thumbnails listing-products">
-									<li class="span3">
-										<div class="product-box">
-											<span class="sale_tag"></span>
-											<img th:src="${rdProduct.photoUrl}" alt="" src="/front/themes/images/ladies/1.jpg"><br/>
-											<a th:text="${rdProduct.name}" th:href="@{'/product/product-detail/' + ${rdProduct.id}}" class="title">Fusce id molestie massa</a><br/>
-											<a th:text="${rdProduct.productCategory.name}" href="#" class="category">Suspendisse aliquet</a>
-											<p th:text="${rdProduct.price}+'$'" class="price">$261</p>
-										</div>
-									</li>
-								</ul>
+								<div class="product-box">
+									<img th:src="${rdProduct.photoUrl}" alt="">
+									<a th:text="${rdProduct.name}" th:href="@{'/product/product-detail/' + ${rdProduct.id}}" class="title">Product Name</a>
+									<a th:text="${rdProduct.productCategory.name}" href="#" class="category">Category</a>
+									<p th:text="${rdProduct.price}+'$'" class="price">$261</p>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 
+				<!-- BEST SELLER -->
 				<div class="block">
-					<h4 class="title"><strong>Best</strong> Seller</h4>
+					<h4 class="title"><span class="text">Best Seller</span></h4>
 					<ul class="small-product">
 						<li th:each="product : ${bsProduct}">
-							<a href="#" title="Praesent tempor sem sodales">
-								<img th:src="${product.photoUrl}" src="/front/themes/images/ladies/3.jpg" alt="Praesent tempor sem sodales">
+							<a th:href="@{'/product/product-detail/' + ${product.id}}">
+								<img th:src="${product.photoUrl}" alt="Product">
 							</a>
-							<a th:text="${product.name}"  th:href="@{'/product/product-detail/' + ${product.id}}">Praesent tempor sem</a>
+							<a th:text="${product.name}" th:href="@{'/product/product-detail/' + ${product.id}}">Product Name</a>
 						</li>
 					</ul>
 				</div>
-
 			</div>
 		</div>
 	</section>

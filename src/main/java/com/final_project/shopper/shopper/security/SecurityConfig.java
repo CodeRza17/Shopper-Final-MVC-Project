@@ -1,6 +1,5 @@
 package com.final_project.shopper.shopper.security;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
+
     @Autowired
     private DefaultUserService userDetailsService;
 
@@ -31,9 +31,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/api/**")
-                )
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/dashboard/**")
                         .hasAnyRole("SUPER_ADMIN", "OWNER", "MANAGER", "ADMIN")
@@ -49,10 +47,10 @@ public class SecurityConfig {
                         .logoutSuccessUrl("/login")
                         .permitAll()
                 )
-                .exceptionHandling(exception -> exception.accessDeniedPage("/error/403"));
+                .exceptionHandling(exception ->
+                        exception.accessDeniedPage("/403")
+                );
 
         return http.build();
     }
-
-
 }
